@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using RZA_OMwebsite.Components;
 using RZA_OMwebsite.Models;
+using MudBlazor.Services;
+using MudBlazor;
 
 namespace RZA_OMwebsite
 {
@@ -13,6 +15,20 @@ namespace RZA_OMwebsite
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            builder.Services.AddMudServices(config =>
+            {
+                config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomCenter;
+                config.SnackbarConfiguration.PreventDuplicates = true;
+                config.SnackbarConfiguration.NewestOnTop = false;
+                config.SnackbarConfiguration.ShowCloseIcon = true;
+                config.SnackbarConfiguration.VisibleStateDuration = 10000;
+                config.SnackbarConfiguration.HideTransitionDuration = 500;
+                config.SnackbarConfiguration.ShowTransitionDuration = 500;
+                config.SnackbarConfiguration.SnackbarVariant = Variant.Filled;
+            });
+
+
 
             builder.Services.AddDbContext<TlS2303831RzaContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
@@ -38,5 +54,6 @@ namespace RZA_OMwebsite
 
             app.Run();
         }
+
     }
 }

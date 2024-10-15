@@ -1,30 +1,36 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">RZA_OMwebsite</a>
-    </div>
-</div>
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+<MudList T="string">
+    <MudListItem Text="Home" Icon="@Icons.Material.Filled.Home" Href="/" Class="@(IsActive("/") ? "active" : "")" />
+    <MudListItem Text="Bookings" Icon="@Icons.Material.Filled.Event" Href="/booking" Class="@(IsActive("/booking") ? "active" : "")" />
+    <MudListItem Text="Events" Icon="@Icons.Material.Filled.CalendarToday" Href="/events" Class="@(IsActive("/events") ? "active" : "")" />
+    <MudListItem Text="Visitor Info" Icon="@Icons.Material.Filled.Info" Href="/visitor-info" Class="@(IsActive("/visitor-info") ? "active" : "")" />
+</MudList>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
+@code {
+    private bool IsActive(string path)
+    {
+        return NavigationManager.Uri.EndsWith(path);
+    }
+}
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<style>
+    .mud-list {
+        padding: 0; /* Adjust padding as needed */
+    }
 
+    .mud-list-item {
+        transition: background-color 0.3s; /* Smooth transition for background */
+    }
+
+        .mud-list-item:hover {
+            background-color: rgba(255, 255, 255, 0.2); /* Change color on hover */
+        }
+
+    .active {
+        background-color: rgba(0, 123, 255, 0.3); /* Light blue highlight */
+    }
+
+</style>

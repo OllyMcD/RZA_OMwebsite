@@ -1,7 +1,97 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+    <!-- Full-Screen Hero Section -->
+    <MudGrid>
+        <MudItem xs="12">
+            <MudPaper Class="pa-5 mud-hero-section" Elevation="4">
+                <MudText Typo="Typo.h4" Align="Align.Center">Welcome to Rigit Zoo Adventure</MudText>
+                <MudText Typo="Typo.body1" Align="Align.Center">Explore the wild like never before.</MudText>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/visitor-info" Class="mt-3">Plan Your Visit</MudButton>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
 
-<h1>Hello, world!</h1>
+    <!-- Featured Animal Section -->
+    <MudGrid Class="mt-4">
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard>
+                <MudCardMedia Image="images/animal-of-the-month.jpg" Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Animal of the Month</MudText>
+                    <MudText>Learn more about this amazing animal and its habitat!</MudText>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
-Welcome to your new app.
+    <!-- Testimonials Section -->
+    <MudGrid Class="mt-4">
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6">Visitor Testimonials</MudText>
+            <MudExpansionPanels>
+                <MudExpansionPanel Text="John Pork">
+                    <MudText>“An amazing experience! The animals are well cared for and the staff is friendly.”</MudText>
+                    <MudAvatar Image="images/john-pork-profile.jpg" Alt="John Pork's Profile" Class="mt-2" />
+                    <MudText>Frequent Visitor, loves the elephant exhibit.</MudText>
+                </MudExpansionPanel>
+            </MudExpansionPanels>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Newsletter Section -->
+    <MudGrid Class="mt-4">
+        <MudItem xs="12">
+            <MudCard>
+                <MudCardContent>
+                    <MudText Typo="Typo.h6">Stay Updated!</MudText>
+                    <MudText Typo="Typo.body2">Enter your email to subscribe to our newsletter:</MudText>
+                    <MudTextField T="string" Label="Email" Placeholder="Enter your email" Variant="Variant.Outlined" />
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">Subscribe</MudButton>
+                </MudCardContent>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+
+    <!-- Footer Section -->
+    <MudGrid Class="mt-4">
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2">Contact Us: (123) 456-7890</MudText>
+            <MudText Typo="Typo.body2">Email: info@rigitzoo.com</MudText>
+            <MudLink Href="https://facebook.com/rigitzoo" Target="_blank">Facebook</MudLink>
+            <MudLink Href="https://twitter.com/rigitzoo" Target="_blank">Twitter</MudLink>
+            <MudLink Href="https://instagram.com/rigitzoo" Target="_blank">Instagram</MudLink>
+        </MudItem>
+    </MudGrid>
+@* </MudContainer> *@
+
+<style>
+    /* Container styling */
+    .mud-container {
+        background-color: #F3CA5F; /* Friendly yellow */
+        padding: 20px;
+        font-family: 'Arial', sans-serif; /* Clean, professional font */
+    }
+
+    /* AppBar styling */
+    .mud-appbar {
+        background-color: #004d40; /* Deep teal for a professional feel */
+        color: white;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for smoothness */
+    }
+
+    /* Hero section styling */
+    .mud-hero-section {
+        background-image: url('/images/zoo-background.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 50px;
+        border-radius: 10px;
+        transition: background 0.3s ease;
+    }
+
+    /* Card hover effect for smooth transitions */
+    .mud-card:hover {
+        transform: scale(1.05);
+        transition: transform 0.2s ease-in-out;
+    }
+</style>
