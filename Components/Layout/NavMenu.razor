@@ -2,18 +2,12 @@
 @inject NavigationManager NavigationManager
 
 <MudList T="string">
-    <MudListItem Text="Home" Icon="@Icons.Material.Filled.Home" Href="/" Class="@(IsActive("/") ? "active" : "")" />
-    <MudListItem Text="Bookings" Icon="@Icons.Material.Filled.Event" Href="/booking" Class="@(IsActive("/booking") ? "active" : "")" />
-    <MudListItem Text="Events" Icon="@Icons.Material.Filled.CalendarToday" Href="/events" Class="@(IsActive("/events") ? "active" : "")" />
-    <MudListItem Text="Visitor Info" Icon="@Icons.Material.Filled.Info" Href="/visitor-info" Class="@(IsActive("/visitor-info") ? "active" : "")" />
+    <MudListItem Text="Home" Icon="@Icons.Material.Filled.Home" Href="/" />
+    <MudListItem Text="Bookings" Icon="@Icons.Material.Filled.Event" Href="/booking"/>
+    <MudListItem Text="Events" Icon="@Icons.Material.Filled.CalendarToday" Href="/events"  />
+    <MudListItem Text="Visitor Info" Icon="@Icons.Material.Filled.Info" Href="/visitor-info" />
+    <MudListItem Text="Register" Icon="@Icons.Material.Filled.Info" Href="/register" />
 </MudList>
-
-@code {
-    private bool IsActive(string path)
-    {
-        return NavigationManager.Uri.EndsWith(path);
-    }
-}
 
 
 <style>

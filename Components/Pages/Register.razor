@@ -1,0 +1,26 @@
+﻿@page "/register"
+@using RZA_OMwebsite.Services;
+@using RZA_OMwebsite.Models;
+@inject CustomerService CustomerService
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
+    <MudText Typo="Typo.h4" Align="Align.Center">Register</MudText>
+
+    <MudForm>
+        <MudTextField Label="Username" @bind-Value="newCustomer.Username" Required="true" Class="mb-3" />
+        <MudTextField Label="Password" @bind-Value="newCustomer.Password" InputType="InputType.Password" Required="true" Class="mb-3" />
+        <MudTextField Label="First Name" @bind-Value="newCustomer.FirstName" Required="true" Class="mb-3" />
+        <MudTextField Label="Last Name" @bind-Value="newCustomer.LastName" Required="true" Class="mb-3" />
+        <MudTextField Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true">Register</MudButton>
+    </MudForm>
+</MudPaper>
+
+@code {
+    private Customer newCustomer = new Customer();
+
+    private async Task RegisterCustomer()
+    {
+        await CustomerService.AddCustomerAsync(newCustomer);
+    }
+}

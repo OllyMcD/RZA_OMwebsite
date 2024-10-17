@@ -3,6 +3,7 @@ using RZA_OMwebsite.Components;
 using RZA_OMwebsite.Models;
 using MudBlazor.Services;
 using MudBlazor;
+using RZA_OMwebsite.Services;
 
 namespace RZA_OMwebsite
 {
@@ -33,6 +34,9 @@ namespace RZA_OMwebsite
             builder.Services.AddDbContext<TlS2303831RzaContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
                 new MySqlServerVersion(new Version(8, 0, 29))));
+            #region hidden
+            builder.Services.AddScoped<CustomerService>();
+            #endregion
 
             var app = builder.Build();
 

@@ -1,23 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
+@* Required *@
+<MudThemeProvider />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
 <MudLayout>
     <MudDrawer @bind-Open="open" Width="250px" Class="mud-drawer">
         <NavMenu /> <!-- Include NavMenu here -->
     </MudDrawer>
-
-    <MudMainContent Class="pt-0">
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4">
-            @Body
-        </MudContainer>
-    </MudMainContent>
-
-    <MudAppBar Fixed="true" Color="Color.Primary" Elevation="1">
+    <MudAppBar Fixed="false" Color="Color.Primary" Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" @onclick="ToggleDrawer" />
         <MudSpacer />
-        <MudText Typo="Typo.h5" >Rigit Zoo Adventure</MudText>
+        <MudText Typo="Typo.h5">Rigit Zoo Adventure</MudText>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Settings" Alt="Settings" href="/accessibility" />
     </MudAppBar>
+    <MudMainContent Class="pt-0">
+        @Body
+    </MudMainContent>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.
