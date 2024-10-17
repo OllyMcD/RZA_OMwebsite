@@ -1,0 +1,35 @@
+﻿@page "/mainpage"
+@inject NavigationManager Navigation
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="2">
+    <MudText Typo="Typo.h4" Align="Align.Center">Welcome to the Main Page!</MudText>
+
+    @if (isLoggedIn)
+    {
+        <MudText Align="Align.Center">You are successfully logged in.</MudText>
+    }
+    else
+    {
+        Navigation.NavigateTo("/login");
+    }
+</MudPaper>
+
+@code {
+    private bool isLoggedIn;
+
+    protected override void OnInitialized()
+    {
+        isLoggedIn = CheckLoginStatus();
+
+        if (!isLoggedIn)
+        {
+            Navigation.NavigateTo("/login");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return true; // Simulating that the user is logged in for this example
+    }
+}

@@ -1,5 +1,54 @@
-﻿<h3>Login</h3>
+﻿@page "/login"
+@using RZA_OMwebsite.Services;
+@using RZA_OMwebsite.Models;
+@inject CustomerService CustomerService
+
+<br />
+<br />
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
+    <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
+
+    <MudForm>
+        <MudTextField Label="Username" @bind-Value="loginUsername" Required="true" Class="mb-3" />
+        <MudTextField Label="Password" @bind-Value="loginPassword" InputType="InputType.Password" Required="true" Class="mb-3" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginCustomer" Class="mt-3" FullWidth="true">Login</MudButton>
+    </MudForm>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+    }
+</MudPaper>
 
 @code {
+    private string loginUsername = string.Empty;
+    private string loginPassword = string.Empty;
+    private string message = string.Empty; // Initialize with an empty string
+    private Severity alertSeverity;
 
+    private async Task LoginCustomer()
+    {
+        // Validate that both fields are filled
+        if (string.IsNullOrWhiteSpace(loginUsername) || string.IsNullOrWhiteSpace(loginPassword))
+        {
+            message = "Both Username and Password are required.";
+            alertSeverity = Severity.Error;
+            return;
+        }
+
+        // Example: Simulating login logic; replace with your actual authentication logic
+        bool isValidUser = await CustomerService.ValidateLoginAsync(loginUsername, loginPassword);
+
+        if (isValidUser)
+        {
+            message = "Login successful!";
+            alertSeverity = Severity.Success;
+        }
+        else
+        {
+            message = "Invalid Username or Password. Please try again.";
+            alertSeverity = Severity.Error;
+        }
+    }
 }

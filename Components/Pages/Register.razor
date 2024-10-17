@@ -3,6 +3,9 @@
 @using RZA_OMwebsite.Models;
 @inject CustomerService CustomerService
 
+<br />
+<br />
+
 <MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
     <MudText Typo="Typo.h4" Align="Align.Center">Register</MudText>
 
@@ -14,13 +17,43 @@
         <MudTextField Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true">Register</MudButton>
     </MudForm>
+
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+    }
 </MudPaper>
 
 @code {
     private Customer newCustomer = new Customer();
+    private string message = string.Empty; // Initialize with an empty string
+    private Severity alertSeverity;
 
     private async Task RegisterCustomer()
     {
-        await CustomerService.AddCustomerAsync(newCustomer);
+        // Validate all required fields
+        if (string.IsNullOrWhiteSpace(newCustomer.Username) ||
+            string.IsNullOrWhiteSpace(newCustomer.Password) ||
+            string.IsNullOrWhiteSpace(newCustomer.FirstName) ||
+            string.IsNullOrWhiteSpace(newCustomer.LastName) ||
+            string.IsNullOrWhiteSpace(newCustomer.Email))
+        {
+            message = "All fields are required. Please fill in all the details.";
+            alertSeverity = Severity.Warning;
+            return;
+        }
+
+        bool isAdded = await CustomerService.AddCustomerAsync(newCustomer);
+
+        if (isAdded)
+        {
+            message = "Registration successful!";
+            alertSeverity = Severity.Success;
+        }
+        else
+        {
+            message = "Username already exists. Please choose another.";
+            alertSeverity = Severity.Error;
+        }
     }
 }

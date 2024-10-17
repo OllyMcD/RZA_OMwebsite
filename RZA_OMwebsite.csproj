@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Components\Pages\MainPage.razor" />
     <Content Remove="wwwroot\images\Animal-feeding.jpg" />
     <Content Remove="wwwroot\images\animal-of-the-month.jpg" />
     <Content Remove="wwwroot\images\BookingCalender.png" />
@@ -58,6 +59,18 @@
     <Resource Include="wwwroot\images\Special-events.jpg" />
     <Resource Include="wwwroot\images\Wildlife-safari.webp" />
     <Resource Include="wwwroot\images\Workshop.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\MainPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\MainPage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\MainPage.razor" />
   </ItemGroup>
 
 </Project>
