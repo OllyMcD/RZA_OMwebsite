@@ -1,9 +1,66 @@
 ﻿@page "/events"
+@using RZA_OMwebsite.Services
+@using MudBlazor
+@inject AuthService AuthService
+@inject NavigationManager Navigation
 
-<h5> Events </h5>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
+    <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center">Upcoming Events</MudText>
+        <MudDivider Class="my-2" />
 
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/x4eL5Vu7BJI" title="this rocket league video will put you on meds" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        @if (!AuthService.IsLoggedIn)
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center">Here are some exciting events coming up:</MudText>
+
+            <MudGrid Spacing="4" Justify="Justify.Center">
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">🐾 Animal Encounter Day</MudText>
+                            <MudText Typo="Typo.body2">Join us for a close-up experience with our wildlife on March 15th!</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">🌳 Eco-Fair</MudText>
+                            <MudText Typo="Typo.body2">Discover sustainable practices and eco-friendly products on April 22nd!</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">🎉 Family Fun Day</MudText>
+                            <MudText Typo="Typo.body2">Enjoy games, food, and activities for all ages on May 5th!</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
+        }
+    </MudPaper>
+</MudContainer>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (!CheckLoginStatus())
+        {
+            Navigation.NavigateTo("/"); // Redirect to home if not logged in
+        }
+    }
 
+    private bool CheckLoginStatus()
+    {
+        return AuthService.IsLoggedIn; // Check the login status
+    }
 }

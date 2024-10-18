@@ -11,7 +11,9 @@
     <Content Remove="wwwroot\images\animal-of-the-month.jpg" />
     <Content Remove="wwwroot\images\BookingCalender.png" />
     <Content Remove="wwwroot\images\Conservation.jpg" />
+    <Content Remove="wwwroot\images\facebook.png" />
     <Content Remove="wwwroot\images\Family-day.jpg" />
+    <Content Remove="wwwroot\images\instagram.png" />
     <Content Remove="wwwroot\images\john-pork-profile.jpg" />
     <Content Remove="wwwroot\images\Logo.png" />
     <Content Remove="wwwroot\images\MainPage1.jpg" />
@@ -22,11 +24,13 @@
     <Content Remove="wwwroot\images\School-trip.jpg" />
     <Content Remove="wwwroot\images\SettingsLogo1.png" />
     <Content Remove="wwwroot\images\Special-events.jpg" />
+    <Content Remove="wwwroot\images\twitter.png" />
     <Content Remove="wwwroot\images\Wildlife-safari.webp" />
     <Content Remove="wwwroot\images\Workshop.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10">
       <PrivateAssets>all</PrivateAssets>
@@ -51,6 +55,9 @@
     <Resource Include="wwwroot\images\MainPage1.jpg" />
     <Resource Include="wwwroot\images\MainPage2.jpg" />
     <Resource Include="wwwroot\images\MainPage3.jpg" />
+    <Resource Include="wwwroot\images\Facebook.png" />
+    <Resource Include="wwwroot\images\Instagram.png" />
+    <Resource Include="wwwroot\images\Twitter.png" />
     <Resource Include="wwwroot\images\Nature-walk.jpg" />
     <Resource Include="wwwroot\images\Photography.jpg" />
     <Resource Include="wwwroot\images\School-trip.jpg" />

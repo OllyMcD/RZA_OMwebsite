@@ -1,7 +1,49 @@
 ﻿@page "/visitor-info"
+@using RZA_OMwebsite.Services
+@using MudBlazor
+@inject AuthService AuthService
+@inject NavigationManager Navigation
 
-<h5> Visitor Info </h5>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
+    <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center">Visitor Information</MudText>
+        <MudDivider Class="my-2" />
+
+        @if (!AuthService.IsLoggedIn)
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center">Welcome to our Visitor Info page! Here’s what you need to know:</MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">
+                🌟 **Hours of Operation:** We're open daily from 9 AM to 5 PM.
+            </MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">
+                🗺️ **Location:** 123 Zoo Lane, Animal City.
+            </MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">
+                🎟️ **Tickets:** Purchase your tickets online or at the gate. Discounts available for groups!
+            </MudText>
+            <MudText Typo="Typo.body2" Class="mt-2">
+                🍽️ **Food & Drink:** Enjoy a variety of dining options throughout the park.
+            </MudText>
+        }
+    </MudPaper>
+</MudContainer>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        if (!CheckLoginStatus())
+        {
+            Navigation.NavigateTo("/"); // Redirect to home if not logged in
+        }
+    }
 
+    private bool CheckLoginStatus()
+    {
+        return AuthService.IsLoggedIn; // Check the login status
+    }
 }

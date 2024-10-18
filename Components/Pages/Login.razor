@@ -1,11 +1,7 @@
 ﻿@page "/login"
 @using RZA_OMwebsite.Services
 @inject AuthService AuthService
-@inject CustomerService CustomerService
 @inject NavigationManager Navigation
-
-<br /> 
-<br />
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
     <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
@@ -16,37 +12,40 @@
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
     </MudForm>
 
-    @if (showError)
+    @if (!string.IsNullOrEmpty(message))
     {
-        <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Square="true" Class="my-2">Login failed. Please check your credentials.</MudAlert>
+        <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
     }
 </MudPaper>
 
 @code {
     private string? username;
     private string? password;
-    private bool showError;
+    private string message = string.Empty;
+    private Severity alertSeverity;
 
-    private async Task LoginUser()
+    private void LoginUser()
     {
-        // Check if username or password is null or empty
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            showError = true; // Show error message for empty fields
+            message = "Username and password are required.";
+            alertSeverity = Severity.Warning;
             return;
         }
 
-        // Now you can safely access the instance method ValidateLoginAsync
-        bool isValidUser = await CustomerService.ValidateLoginAsync(username, password);
+        // Call the AuthService Login method with username and password
+        bool loginSuccess = AuthService.Login(username, password);
 
-        if (isValidUser)
+        if (loginSuccess)
         {
-            AuthService.Login(); // Set the login status
-            Navigation.NavigateTo("/main"); // Redirect to Main Page
+            message = "Login successful!";
+            alertSeverity = Severity.Success;
+            Navigation.NavigateTo("/main"); // Redirect to main page
         }
         else
         {
-            showError = true; // Show error message
+            message = "Invalid username or password.";
+            alertSeverity = Severity.Error;
         }
     }
 }

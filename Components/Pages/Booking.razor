@@ -1,7 +1,90 @@
 ﻿@page "/booking"
+@using RZA_OMwebsite.Services
+@using MudBlazor
+@inject AuthService AuthService
+@inject NavigationManager Navigation
 
-<h5> Booking </h5>
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
+    <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
+        <MudText Typo="Typo.h4" Align="Align.Center">Booking Page</MudText>
+        <MudDivider Class="my-2" />
+
+        @if (!AuthService.IsLoggedIn)
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
+        }
+        else
+        {
+            <MudForm @ref="bookingForm" Model="bookingModel">
+                <MudTextField @bind-Value="bookingModel.Name" Label="Name" Required="true" />
+                <MudTextField @bind-Value="bookingModel.Email" Label="Email" Required="true" />
+                <MudTextField @bind-Value="bookingModel.Phone" Label="Phone Number" Required="true" />
+
+                <MudSelect @bind-Value="bookingModel.Tickets" Label="Number of Tickets" Required="true">
+                    <MudSelectItem Value="1">1</MudSelectItem>
+                    <MudSelectItem Value="2">2</MudSelectItem>
+                    <MudSelectItem Value="3">3</MudSelectItem>
+                    <MudSelectItem Value="4">4</MudSelectItem>
+                    <MudSelectItem Value="5">5</MudSelectItem>
+                </MudSelect>
+
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitBooking">Submit Booking</MudButton>
+            </MudForm>
+
+            @if (!string.IsNullOrEmpty(successMessage))
+            {
+                <MudAlert Severity="Severity.Success" Variant="Variant.Outlined" Class="my-2">@successMessage</MudAlert>
+            }
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="my-2">@errorMessage</MudAlert>
+            }
+        }
+    </MudPaper>
+</MudContainer>
 
 @code {
+    private MudForm? bookingForm; // Make bookingForm nullable
+    private BookingModel bookingModel = new BookingModel();
+    private string successMessage = string.Empty;
+    private string errorMessage = string.Empty;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (!CheckLoginStatus())
+        {
+            Navigation.NavigateTo("/"); // Redirect to home if not logged in
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.IsLoggedIn; // Check the login status
+    }
+
+    private void SubmitBooking()
+    {
+        if (bookingForm != null && bookingForm.IsValid)
+        {
+            // Simulate booking submission logic
+            successMessage = "Your booking has been successfully submitted!";
+            errorMessage = string.Empty;
+            bookingModel = new BookingModel(); // Reset form
+        }
+        else
+        {
+            errorMessage = "Please fill in all required fields.";
+            successMessage = string.Empty;
+        }
+    }
+
+    public class BookingModel
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int Tickets { get; set; }
+    }
 }

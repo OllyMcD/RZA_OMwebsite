@@ -20,7 +20,7 @@
             <!-- Book Now Section -->
             <MudItem xs="12" sm="6" md="4">
                 <MudCard Style="background-color: #FFFBEA;">
-                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                <MudCardMedia Image="images/MainPage1.jpg" Height="200" />
                     <MudCardContent>
                         <MudText Typo="Typo.h5">Ready to Make a Booking?</MudText>
                         <MudText Typo="Typo.body2">Your next adventure is waiting! Book your experience now.</MudText>
@@ -34,7 +34,7 @@
             <!-- Explore Events Section -->
             <MudItem xs="12" sm="6" md="4">
                 <MudCard Style="background-color: #FFFAF0;">
-                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                <MudCardMedia Image="images/MainPage2.jpg" Height="200" />
                     <MudCardContent>
                         <MudText Typo="Typo.h5">Upcoming Events</MudText>
                         <MudText Typo="Typo.body2">Join us for our exclusive events and activities. Explore the list!</MudText>
@@ -48,7 +48,7 @@
             <!-- Contact Us Section -->
             <MudItem xs="12" sm="6" md="4">
                 <MudCard Style="background-color: #FFFAFA;">
-                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                    <MudCardMedia Image=images/MainPage3.jpg Height="200" />
                     <MudCardContent>
                         <MudText Typo="Typo.h5">Need Help? Contact Us</MudText>
                         <MudText Typo="Typo.body2">Got any questions or need assistance? Our team is here to help.</MudText>
@@ -89,11 +89,9 @@
                 <MudText Typo="Typo.body2" Color="Color.Secondary">© 2024 RigetZooAdventures</MudText>
             </MudItem>
             <MudItem>
-                <MudIcon Icon="mdi-facebook" Color="Color.Primary" />
-                <MudIcon Icon="mdi-twitter" Color="Color.Primary" />
-                <MudIcon Icon="mdi-instagram" Color="Color.Primary" />
-
-
+                <MudImage Src="images/Facebook.png" Style="width: 24px; height: 24px;" />
+                <MudImage Src="images/Twitter.png" Style="width: 24px; height: 24px;" />
+                <MudImage Src="images/Instagram.png" Style="width: 24px; height: 24px;" />
             </MudItem>
         </MudGrid>
 
@@ -118,3 +116,4 @@
         return AuthService.IsLoggedIn; // Simulating that the user is logged in for this example
     }
 }
+
