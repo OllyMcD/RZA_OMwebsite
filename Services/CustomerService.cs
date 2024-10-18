@@ -42,10 +42,12 @@ namespace RZA_OMwebsite.Services
         // Validate login credentials
         public async Task<bool> ValidateLoginAsync(string username, string password)
         {
-            // Check if the user exists with the provided username and password
+            // Check if the username exists
             var customer = await _context.Customers
                 .FirstOrDefaultAsync(c => c.Username == username && c.Password == password);
-            return customer != null;
+
+            return customer != null; // Return true if user is found
         }
+
     }
 }

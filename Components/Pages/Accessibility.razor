@@ -1,0 +1,37 @@
+﻿@page "/accessibility"
+@using MudBlazor
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
+    <MudText Typo="Typo.h4" Align="Align.Center">Settings</MudText>
+    <MudDivider Class="my-2" />
+
+    <!-- High Contrast Mode -->
+    <MudGrid Justify="Justify.Center" AlignItems="Center">
+        <MudItem xs="12" sm="6">
+            <MudText Typo="Typo.body1">Enable High Contrast Mode</MudText>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudSwitch T="bool" @bind-Checked="highContrastEnabled" Color="Color.Primary" Label="Enable High Contrast" />
+        </MudItem>
+    </MudGrid>
+
+    <!-- Increase Text Size -->
+    <MudGrid Justify="Justify.Center" AlignItems="Center">
+        <MudItem xs="12" sm="6">
+            <MudText Typo="Typo.body1">Increase Text Size</MudText>
+        </MudItem>
+        <MudItem xs="12" sm="6">
+            <MudSlider Min="12" Max="24" Step="1" @bind-Value="textSize"/>
+        </MudItem>
+    </MudGrid>   
+</MudPaper>
+
+@code {
+    private bool highContrastEnabled = false;
+    private double textSize = 16;
+
+    private void ToggleHighContrastMode()
+    {
+        highContrastEnabled = !highContrastEnabled;
+    }
+}

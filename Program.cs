@@ -36,6 +36,8 @@ namespace RZA_OMwebsite
                 new MySqlServerVersion(new Version(8, 0, 29))));
             #region hidden
             builder.Services.AddScoped<CustomerService>();
+            builder.Services.AddScoped<AuthService>();
+            builder.Services.AddSingleton<AuthService>();
             #endregion
 
             var app = builder.Build();

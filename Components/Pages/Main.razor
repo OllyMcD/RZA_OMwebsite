@@ -1,0 +1,120 @@
+﻿@page "/main"
+@using RZA_OMwebsite.Services
+@using MudBlazor
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
+
+    <!-- Hero Section -->
+    <MudGrid Justify="Justify.Center">
+        <MudPaper Class="pa-4" Style="background-color: #FFD700; width: 100%; text-align: center; margin-bottom: 2rem;">
+            <MudText Typo="Typo.h2" Color="Color.Primary" Align="Align.Center">Welcome Back to Our Site!</MudText>
+            <MudText Typo="Typo.subtitle1" Align="Align.Center">We're glad to have you. Explore your next adventure below.</MudText>
+        </MudPaper>
+    </MudGrid>
+
+
+        <!-- Action Cards -->
+        <MudGrid Spacing="2" Justify="Justify.Center" AlignItems="Center">
+            <!-- Book Now Section -->
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Style="background-color: #FFFBEA;">
+                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Ready to Make a Booking?</MudText>
+                        <MudText Typo="Typo.body2">Your next adventure is waiting! Book your experience now.</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/booking"))">Book Now</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+
+            <!-- Explore Events Section -->
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Style="background-color: #FFFAF0;">
+                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Upcoming Events</MudText>
+                        <MudText Typo="Typo.body2">Join us for our exclusive events and activities. Explore the list!</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => Navigation.NavigateTo("/events"))">Explore Events</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+
+            <!-- Contact Us Section -->
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Style="background-color: #FFFAFA;">
+                    <MudCardMedia Image="https://via.placeholder.com/400x200" Height="200" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">Need Help? Contact Us</MudText>
+                        <MudText Typo="Typo.body2">Got any questions or need assistance? Our team is here to help.</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => Navigation.NavigateTo("/contact"))">Contact Us</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+
+        <!-- Features Section -->
+        <MudGrid Spacing="3" Justify="Justify.Center" AlignItems="Center" Class="mt-5">
+            <MudItem xs="12" sm="6">
+                <MudPaper Class="pa-4" Style="background-color: #FFF8DC;">
+                    <MudText Typo="Typo.h6">🌟 Featured: Animal of the Month</MudText>
+                    <MudText Typo="Typo.body1">Meet our star of the month, the mighty red panda! Come see it up close.</MudText>
+                    <MudButton Class="mt-2" Variant="Variant.Outlined" Color="Color.Success">Learn More</MudButton>
+                </MudPaper>
+            </MudItem>
+
+            <MudItem xs="12" sm="6">
+                <MudPaper Class="pa-4" Style="background-color: #FFF8E7;">
+                    <MudText Typo="Typo.h6">💌 Join Our Newsletter</MudText>
+                    <MudText Typo="Typo.body1">Stay updated with the latest news, events, and exclusive offers. Sign up now!</MudText>
+                    <MudButton Class="mt-2" Variant="Variant.Outlined" Color="Color.Warning">Subscribe</MudButton>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+
+        <br />
+        <br />
+        <br />
+
+        <!-- Footer Section -->
+        <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
+            <MudItem>
+                <MudText Typo="Typo.body2" Color="Color.Secondary">© 2024 RigetZooAdventures</MudText>
+            </MudItem>
+            <MudItem>
+                <MudIcon Icon="mdi-facebook" Color="Color.Primary" />
+                <MudIcon Icon="mdi-twitter" Color="Color.Primary" />
+                <MudIcon Icon="mdi-instagram" Color="Color.Primary" />
+
+
+            </MudItem>
+        </MudGrid>
+
+</MudContainer>
+
+@code {
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoggedIn = CheckLoginStatus();
+
+        if (!isLoggedIn)
+        {
+            Navigation.NavigateTo("/");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.IsLoggedIn; // Simulating that the user is logged in for this example
+    }
+}
