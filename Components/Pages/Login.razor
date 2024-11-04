@@ -1,7 +1,12 @@
 ﻿@page "/login"
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Utilities
 @inject AuthService AuthService
 @inject NavigationManager Navigation
+@inject CustomerService CustomerService
+
+<br />
+<br />
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
     <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
@@ -24,7 +29,7 @@
     private string message = string.Empty;
     private Severity alertSeverity;
 
-    private void LoginUser()
+    private async Task LoginUser()
     {
         if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
@@ -33,11 +38,14 @@
             return;
         }
 
-        // Call the AuthService Login method with username and password
-        bool loginSuccess = AuthService.Login(username, password);
+        var hashedPassword = await PasswordUtils.HashPassword(password);
+
+        // Call the CustomerService to validate login
+        bool loginSuccess = await CustomerService.ValidateLoginAsync(username, hashedPassword);
 
         if (loginSuccess)
         {
+            AuthService.Login(username); // Use AuthService.Login to set login state and username
             message = "Login successful!";
             alertSeverity = Severity.Success;
             Navigation.NavigateTo("/main"); // Redirect to main page

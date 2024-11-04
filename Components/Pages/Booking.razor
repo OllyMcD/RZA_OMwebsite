@@ -4,12 +4,13 @@
 @inject AuthService AuthService
 @inject NavigationManager Navigation
 
+
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
     <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
         <MudText Typo="Typo.h4" Align="Align.Center">Booking Page</MudText>
         <MudDivider Class="my-2" />
 
-        @if (!AuthService.IsLoggedIn)
+        @if (!AuthService.isLoggedIn)
         {
             <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
@@ -18,9 +19,11 @@
         {
             <MudForm @ref="bookingForm" Model="bookingModel">
                 <MudTextField @bind-Value="bookingModel.Name" Label="Name" Required="true" />
+                <br />
                 <MudTextField @bind-Value="bookingModel.Email" Label="Email" Required="true" />
+                <br />
                 <MudTextField @bind-Value="bookingModel.Phone" Label="Phone Number" Required="true" />
-
+                <br />
                 <MudSelect @bind-Value="bookingModel.Tickets" Label="Number of Tickets" Required="true">
                     <MudSelectItem Value="1">1</MudSelectItem>
                     <MudSelectItem Value="2">2</MudSelectItem>
@@ -28,6 +31,8 @@
                     <MudSelectItem Value="4">4</MudSelectItem>
                     <MudSelectItem Value="5">5</MudSelectItem>
                 </MudSelect>
+                <br />
+                <br />
 
                 <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitBooking">Submit Booking</MudButton>
             </MudForm>
@@ -61,7 +66,7 @@
     private bool CheckLoginStatus()
     {
         // Simulate login status; replace this with your actual logic
-        return AuthService.IsLoggedIn; // Check the login status
+        return AuthService.isLoggedIn; // Check the login status
     }
 
     private void SubmitBooking()

@@ -1,15 +1,24 @@
-﻿using RZA_OMwebsite.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using RZA_OMwebsite.Models; // Ensure you have a model for your customers
+using RZA_OMwebsite.Utilities; // For password utilities
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RZA_OMwebsite.Services
 {
     public class CustomerService
     {
-        private readonly TlS2303831RzaContext _context;
+        private readonly TlS2303831RzaContext _context; // Your DbContext
+        
+
+
 
         public CustomerService(TlS2303831RzaContext context)
         {
             _context = context;
+            
         }
 
         // Method to check if username already exists
@@ -32,7 +41,8 @@ namespace RZA_OMwebsite.Services
                 return false; // Username already exists
             }
 
-            // Add customer to the database
+            // Hash the password before saving
+            customer.Password = await PasswordUtils.HashPassword(customer.Password);
             await _context.Customers.AddAsync(customer);
             await _context.SaveChangesAsync();
 
@@ -43,11 +53,24 @@ namespace RZA_OMwebsite.Services
         public async Task<bool> ValidateLoginAsync(string username, string password)
         {
             // Check if the username exists
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(c => c.Username == username && c.Password == password);
-
-            return customer != null; // Return true if user is found
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
+            if (customer != null)
+            {
+                var hashedInputPassword = await PasswordUtils.HashPassword(password);
+                if (customer.Password == hashedInputPassword)
+                {  
+                    return true; // Login successful
+                }
+            }
+            return false; // Login failed
         }
+
+        public async Task<Customer?> GetCustomerByUsernameAsync(string username)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
+        }
+
+
 
     }
 }

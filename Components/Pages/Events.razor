@@ -9,7 +9,7 @@
         <MudText Typo="Typo.h4" Align="Align.Center">Upcoming Events</MudText>
         <MudDivider Class="my-2" />
 
-        @if (!AuthService.IsLoggedIn)
+        @if (!AuthService.isLoggedIn)
         {
             <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
@@ -61,6 +61,6 @@
 
     private bool CheckLoginStatus()
     {
-        return AuthService.IsLoggedIn; // Check the login status
+        return AuthService.isLoggedIn; // Check the login status
     }
 }

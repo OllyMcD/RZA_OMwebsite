@@ -1,0 +1,108 @@
+﻿@page "/account-status"
+@using MudBlazor
+@using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Models
+@inject NavigationManager NavigationManager
+@inject CustomerService CustomerService
+@inject AuthService AuthService
+<MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4">
+    <MudText Typo="Typo.h4" Align="Align.Center">Account Status</MudText>
+    <MudDivider Class="my-2" />
+
+    @if (customer == null)
+    {
+        <MudText Typo="Typo.body1" Align="Align.Center">Please log in to see your account details.</MudText>
+
+        <MudGrid Justify="Justify.Center" Class="mt-4">
+            <MudItem>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="NavigateToLogin" Class="mt-4" Style="font-size: 1.5rem; padding: 0.75rem 1.5rem; width: 200px;">
+                    Log In
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    }
+    else
+    {
+        <!-- User Information -->
+        <MudCard Class="mb-4">
+            <MudCardContent>
+                <MudText Typo="Typo.h5">User Information</MudText>
+                <MudDivider Class="my-2" />
+                <MudGrid>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.body1"><strong>Username:</strong> @customer.Username</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.body1"><strong>Email:</strong> @customer.Email</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.body1"><strong>Post Code:</strong> @customer.Postcode</MudText>
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudText Typo="Typo.body1"><strong>Phone Number:</strong> @customer.PhoneNumber.</MudText>
+                    </MudItem>
+                </MudGrid>
+            </MudCardContent>
+        </MudCard>
+
+        <!-- Account Security -->
+        <MudCard Class="mb-4">
+            <MudCardContent>
+                <MudText Typo="Typo.h5">Security Settings</MudText>
+                <MudDivider Class="my-2" />
+                <MudText Typo="Typo.body1">Change your password and manage security settings below.</MudText>
+                <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="NavigateToChangePassword">Change Password</MudButton>
+            </MudCardContent>
+        </MudCard>
+
+        <!-- Account Actions -->
+        <MudCard Class="mb-4">
+            <MudCardContent>
+                <MudText Typo="Typo.h5">Account Actions</MudText>
+                <MudDivider Class="my-2" />
+                <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteAccount">Delete Account</MudButton>
+            </MudCardContent>
+        </MudCard>
+
+        <!-- Logout Button -->
+        <MudGrid Justify="Justify.Center">
+            <MudItem>
+                <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Logout">Logout</MudButton>
+            </MudItem>
+        </MudGrid>
+    }
+</MudPaper>
+
+@code {
+    private Customer? customer;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthService.isLoggedIn)
+        {
+            // Fetch customer details if logged in
+            customer = await CustomerService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
+        }
+    }
+
+    private void NavigateToChangePassword()
+    {
+        NavigationManager.NavigateTo("/change-password");
+    }
+
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/login");
+    }
+
+    private void DeleteAccount()
+    {
+        // Logic to delete the account goes here
+    }
+
+    private void Logout()
+    {
+        AuthService.Logout();
+        NavigationManager.NavigateTo("/login"); // Redirect to login page
+    }
+}

@@ -1,5 +1,6 @@
 ﻿@page "/accessibility"
 @using MudBlazor
+@inject NavigationManager NavigationManager
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
     <MudText Typo="Typo.h4" Align="Align.Center">Settings</MudText>
@@ -21,17 +22,25 @@
             <MudText Typo="Typo.body1">Increase Text Size</MudText>
         </MudItem>
         <MudItem xs="12" sm="6">
-            <MudSlider Min="12" Max="24" Step="1" @bind-Value="textSize"/>
+            <MudSlider Min="12" Max="24" Step="1" @bind-Value="textSize" />
         </MudItem>
-    </MudGrid>   
+    </MudGrid>
+
+    <!-- Account Settings Link -->
+    <MudGrid Justify="Justify.Center" AlignItems="Center" class="mt-4">
+        <MudItem xs="12">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="NavigateToAccountStatus">Account Settings</MudButton>
+        </MudItem>
+    </MudGrid>
 </MudPaper>
 
 @code {
     private bool highContrastEnabled = false;
     private double textSize = 16;
 
-    private void ToggleHighContrastMode()
+    private void NavigateToAccountStatus()
     {
-        highContrastEnabled = !highContrastEnabled;
+        // Use NavigationManager to navigate to the AccountStatus page
+        NavigationManager.NavigateTo("/account-status");
     }
 }

@@ -38,7 +38,7 @@ namespace RZA_OMwebsite
             builder.Services.AddScoped<CustomerService>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddSingleton<AuthService>();
-            builder.Services.AddSingleton<PasswordHashingService>();
+            
 
             #endregion
 

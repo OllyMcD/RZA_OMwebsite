@@ -1,8 +1,8 @@
 ﻿@page "/register"
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Models
 @inject CustomerService CustomerService
-@inject PasswordHashingService PasswordHashingService // Inject the PasswordHashingService
 
 <br />
 <br />
@@ -45,7 +45,7 @@
         }
 
         // Hash the password before saving
-        var hashedPassword = PasswordHashingService.HashPassword(newCustomer.Password);
+        var hashedPassword = await PasswordUtils.HashPassword(newCustomer.Password);
         newCustomer.Password = hashedPassword; // Store the hashed password
 
         bool isAdded = await CustomerService.AddCustomerAsync(newCustomer);
@@ -54,6 +54,7 @@
         {
             message = "Registration successful!";
             alertSeverity = Severity.Success;
+            newCustomer = new Customer();
         }
         else
         {
