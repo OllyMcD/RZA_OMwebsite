@@ -1,0 +1,107 @@
+﻿@page "/changePassword"
+@using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Utilities
+@using MudBlazor
+@inject CustomerService CustomerService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+@rendermode InteractiveServer
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="4">
+    <h3>Change Password</h3>
+
+    <EditForm OnValidSubmit="ChangePassword">
+        <MudGrid>
+            <MudItem xs="12">
+                <MudTextField Label="Current Password"
+                              Type="password"
+                              @bind-Value="oldPassword"
+                              Required="true"
+                              Adornment="Adornment.Start"
+                              Icon="@Icons.Material.Filled.Lock" />
+            </MudItem>
+            <MudItem xs="12">
+                <MudTextField Label="New Password"
+                              Type="password"
+                              @bind-Value="newPassword"
+                              Required="true"
+                              Adornment="Adornment.Start"
+                              Icon="@Icons.Material.Filled.Lock"
+                              @oninput="CheckPasswordStrength"
+                              Text="@passwordStrengthMessage" />
+
+            </MudItem>
+            <MudItem xs="12">
+               <MudTextField Label="Confirm Password"
+                              Type="password"
+                              @bind-Value="confirmPassword"
+                              Required="true"
+                              Adornment="Adornment.Start"
+                              Icon="@Icons.Material.Filled.Lock"
+                              @oninput="UpdateFormValidation" />
+
+            </MudItem>
+            <MudItem xs="12">
+                <MudButton Type="submit"
+                           Disabled="!isFormValid" 
+                           Color="Color.Primary"
+                           Variant="Variant.Filled">
+                    Change Password
+                </MudButton>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</MudPaper>
+
+
+
+@code {
+    
+    private string newPassword;
+    private string oldPassword;
+    private string confirmPassword;
+
+    private string passwordStrengthMessage = string.Empty;
+    private bool isFormValid;
+
+    private void CheckPasswordStrength(ChangeEventArgs args)
+    {
+        var newPassword = args.Value?.ToString() ?? string.Empty;
+        passwordStrengthMessage = PasswordUtils.CheckPasswordStrength(newPassword);
+        newPassword = newPassword;
+        UpdateFormValidation();
+    }
+
+
+    private void UpdateFormValidation()
+    {
+        isFormValid = !string.IsNullOrWhiteSpace(newPassword) &&
+                      !string.IsNullOrWhiteSpace(newPassword) &&
+                      newPassword == confirmPassword &&
+                      PasswordUtils.IsStrongPassword(newPassword);
+    }
+
+
+    private async Task ChangePassword()
+    {
+        if (await CustomerService.ValidateCurrentPasswordAsync(oldPassword, confirmPassword))
+        {
+            if (newPassword == confirmPassword && PasswordUtils.IsStrongPassword(newPassword))
+            {
+                await CustomerService.ChangePasswordAsync(oldPassword, newPassword);
+                Snackbar.Add("Password changed successfully!", Severity.Success);
+                NavigationManager.NavigateTo("/account");
+            }
+            else
+            {
+                Snackbar.Add("Ensure the new password is strong and matches confirmation.", Severity.Error);
+            }
+        }
+        else
+        {
+            Snackbar.Add("Current password is incorrect.", Severity.Error);
+        }
+    }
+
+    
+}

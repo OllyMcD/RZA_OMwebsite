@@ -38,7 +38,7 @@
             return;
         }
 
-        var hashedPassword = await PasswordUtils.HashPassword(password);
+        var hashedPassword = PasswordUtils.HashPassword(password);
 
         // Call the CustomerService to validate login
         bool loginSuccess = await CustomerService.ValidateLoginAsync(username, hashedPassword);

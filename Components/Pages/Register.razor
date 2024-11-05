@@ -45,7 +45,7 @@
         }
 
         // Hash the password before saving
-        var hashedPassword = await PasswordUtils.HashPassword(newCustomer.Password);
+        var hashedPassword = PasswordUtils.HashPassword(newCustomer.Password);
         newCustomer.Password = hashedPassword; // Store the hashed password
 
         bool isAdded = await CustomerService.AddCustomerAsync(newCustomer);

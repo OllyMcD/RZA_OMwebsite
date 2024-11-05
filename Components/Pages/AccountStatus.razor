@@ -5,6 +5,7 @@
 @inject NavigationManager NavigationManager
 @inject CustomerService CustomerService
 @inject AuthService AuthService
+
 <MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4">
     <MudText Typo="Typo.h4" Align="Align.Center">Account Status</MudText>
     <MudDivider Class="my-2" />
@@ -39,7 +40,7 @@
                         <MudText Typo="Typo.body1"><strong>Post Code:</strong> @customer.Postcode</MudText>
                     </MudItem>
                     <MudItem xs="12" sm="6">
-                        <MudText Typo="Typo.body1"><strong>Phone Number:</strong> @customer.PhoneNumber.</MudText>
+                        <MudText Typo="Typo.body1"><strong>Phone Number:</strong> @customer.PhoneNumber</MudText>
                     </MudItem>
                 </MudGrid>
             </MudCardContent>
@@ -51,6 +52,7 @@
                 <MudText Typo="Typo.h5">Security Settings</MudText>
                 <MudDivider Class="my-2" />
                 <MudText Typo="Typo.body1">Change your password and manage security settings below.</MudText>
+                <br />
                 <MudButton Variant="Variant.Outlined" Color="Color.Primary" OnClick="NavigateToChangePassword">Change Password</MudButton>
             </MudCardContent>
         </MudCard>
@@ -60,13 +62,26 @@
             <MudCardContent>
                 <MudText Typo="Typo.h5">Account Actions</MudText>
                 <MudDivider Class="my-2" />
-                <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="DeleteAccount">Delete Account</MudButton>
+                <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="ShowDeleteConfirmation">Delete Account</MudButton>
+
+                @if (showDeleteConfirmation)
+                {
+                    <MudText Typo="Typo.body2" Color="Color.Error" Class="mt-2">Are you sure you want to delete your account? This action cannot be undone.</MudText>
+                    <MudGrid Justify="Justify.Center" Class="mt-2">
+                        <MudItem>
+                            <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="DeleteAccount">Yes, Delete</MudButton>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="CancelDelete">Cancel</MudButton>
+                        </MudItem>
+                    </MudGrid>
+                }
             </MudCardContent>
         </MudCard>
 
         <!-- Logout Button -->
         <MudGrid Justify="Justify.Center">
             <MudItem>
+                <br />
+                <br />
                 <MudButton Variant="Variant.Filled" Color="Color.Default" OnClick="Logout">Logout</MudButton>
             </MudItem>
         </MudGrid>
@@ -75,6 +90,7 @@
 
 @code {
     private Customer? customer;
+    private bool showDeleteConfirmation = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,19 +101,36 @@
         }
     }
 
+    private void ShowDeleteConfirmation()
+    {
+        showDeleteConfirmation = true;
+    }
+
+    private void CancelDelete()
+    {
+        showDeleteConfirmation = false;
+    }
+
+    private async Task DeleteAccount()
+    {
+        if (customer != null)
+        {
+            // Call the delete method from CustomerService
+            await CustomerService.DeleteCustomerAsync(customer.Username); // Assuming you have this method implemented
+            AuthService.Logout();
+            NavigationManager.NavigateTo("/login"); // Redirect to login page after deletion
+            Console.WriteLine("Account Deleted"); 
+        }
+    }
+
     private void NavigateToChangePassword()
     {
-        NavigationManager.NavigateTo("/change-password");
+        NavigationManager.NavigateTo("/changePassword");
     }
 
     private void NavigateToLogin()
     {
         NavigationManager.NavigateTo("/login");
-    }
-
-    private void DeleteAccount()
-    {
-        // Logic to delete the account goes here
     }
 
     private void Logout()

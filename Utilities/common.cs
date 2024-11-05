@@ -5,58 +5,70 @@ namespace RZA_OMwebsite.Utilities
 {
     public static class PasswordUtils
     {
-        #region hidden
         private static readonly char[] specialCharacters = new char[]
         {
-            '!','£','$','%','^','&','*','(',')','-','=','_','+','[',']','{','}',';',':','@','#','~','<','>'
+            '!', '£', '$', '%', '^', '&', '*', '(', ')', '-', '=', '_', '+', '[', ']', '{', '}', ';', ':', '@', '#', '~', '<', '>'
         };
+
         private static readonly char[] digits = new char[]
         {
-            '1','2','3','4','5','6','7','8','9','0'
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'
         };
-        public static async Task<string> HashPassword(string password)
+
+        // Hashing function for password storage
+        public static string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {
-                // Convert the password to a byte array
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
-
-                // Compute the hash
                 byte[] hashBytes = sha256.ComputeHash(passwordBytes);
-
-                // Convert the byte array to a hexadecimal string
                 var sb = new StringBuilder();
                 foreach (byte b in hashBytes)
                 {
-                    sb.Append(b.ToString("x2"));  // "x2" for hexadecimal formatting
+                    sb.Append(b.ToString("x2")); // "x2" for hexadecimal formatting
                 }
+                return sb.ToString();
+            }
+        }
 
-                return sb.ToString();  // Return the hashed password as a string
-            }
-        }
-        public static async Task<bool> ValidPassword(string password)
+        // Point-based password strength evaluation
+        public static string CheckPasswordStrength(string password)
         {
-            bool valid = true;
-            if (password.Length < 8)
+            int score = 0;
+
+            // Length points
+            if (password.Length >= 8) score++;
+            if (password.Length >= 12) score++;
+
+            // Contains uppercase and lowercase letters
+            if (password.Any(char.IsUpper)) score++;
+            if (password.Any(char.IsLower)) score++;
+
+            // Contains numbers
+            if (password.Any(digits.Contains)) score++;
+
+            // Contains special characters
+            if (password.Any(specialCharacters.Contains)) score++;
+
+            // Assign strength rating based on score
+            return score switch
             {
-                return false;
-            }
-            else if (!digits.Any(d => password.Contains(d)))
-            {
-                return false;
-            }
-            else if (!specialCharacters.Any(sc => password.Contains(sc)))
-            {
-                return false;
-            }
-            else if (password.ToUpper() == password)
-            {
-                return false;
-            }
-            return valid;
+                1 => "Very Weak",
+                2 => "Weak",
+                3 => "Medium",
+                4 => "Strong",
+                >= 5 => "Very Strong",
+                <= 0 => "Unknown"
+            };
         }
-        #endregion
+
+        // Checks if a password is strong or very strong
+        public static bool IsStrongPassword(string password)
+        {
+            return CheckPasswordStrength(password) is "Strong" or "Very Strong";
+        }
     }
+
     public class UserSession
     {
         public int UserId { get; set; }

@@ -1,0 +1,122 @@
+﻿@page "/contact"
+@using MudBlazor
+@using RZA_OMwebsite.Services
+@inject NavigationManager NavigationManager
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4">
+    <MudText Typo="Typo.h4" Align="Align.Center">Contact Us</MudText>
+    <MudDivider Class="my-2" />
+
+    <!-- Contact Information Section -->
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Get in Touch</MudText>
+            <MudDivider Class="my-2" />
+            <MudText Typo="Typo.body1">You can reach us through the following channels:</MudText>
+            <MudText Typo="Typo.body1"><strong>Email:</strong> support@example.com</MudText>
+            <MudText Typo="Typo.body1"><strong>Phone:</strong> +1 234 567 890</MudText>
+            <MudText Typo="Typo.body1"><strong>Address:</strong> 123 Example St, City, Country</MudText>
+        </MudCardContent>
+    </MudCard>
+
+    <!-- Map Section -->
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Find Us Here</MudText>
+            <MudDivider Class="my-2" />
+            <iframe width="300"
+                    height="300"
+                    style="border:0;"
+                    loading="lazy"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345095247!2d144.95373531531912!3d-37.81627997975146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f10f35f%3A0x5045675218cee40!2sExample%20Company!5e0!3m2!1sen!2sus!4v1629298550784!5m2!1sen!2sus"
+                    allowfullscreen>
+            </iframe>
+        </MudCardContent>
+    </MudCard>
+
+    <!-- Contact Form Section -->
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Send Us a Message</MudText>
+            <MudDivider Class="my-2" />
+            <MudGrid>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Name" Required="true" @bind-Value="contact.Name" />
+                </MudItem>
+                <MudItem xs="12" sm="6">
+                    <MudTextField Label="Email" Required="true" @bind-Value="contact.Email" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField Label="Message" Multiline="true" Rows="4" Required="true" @bind-Value="contact.Message" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitContactForm">Send Message</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+
+    <!-- Social Media Section -->
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Follow Us</MudText>
+            <MudDivider Class="my-2" />
+            <MudGrid Justify="Justify.Center">
+                <MudItem>
+                    <a href="https://www.facebook.com" target="_blank">
+                        <img src="images/Facebook.png" alt="Facebook" width="40" height="40" />
+                    </a>
+                </MudItem>
+                <MudItem>
+                    <a href="https://www.twitter.com" target="_blank">
+                        <img src="images/Twitter.png" alt="Twitter" width="40" height="40" />
+                    </a>
+                </MudItem>
+                <MudItem>
+                    <a href="https://www.instagram.com" target="_blank">
+                        <img src="images/Instagram.png" alt="Instagram" width="40" height="40" />
+                    </a>
+                </MudItem>
+            </MudGrid>
+        </MudCardContent>
+    </MudCard>
+
+    <!-- FAQ Section -->
+    <MudCard Class="mb-4">
+        <MudCardContent>
+            <MudText Typo="Typo.h5">Frequently Asked Questions</MudText>
+            <MudDivider Class="my-2" />
+                <MudExpansionPanel Text="What is your refund policy?">
+                    <MudText Typo="Typo.body2">We offer a 30-day refund policy on all purchases.</MudText>
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="How can I track my order?">
+                    <MudText Typo="Typo.body2">You can track your order through the tracking link sent to your email.</MudText>       
+                </MudExpansionPanel>
+                <MudExpansionPanel Text="Do you offer international shipping?">
+                    <MudText Typo="Typo.body2">Yes, we offer international shipping to select countries.</MudText>
+                </MudExpansionPanel>
+        </MudCardContent>
+    </MudCard>
+</MudPaper>
+
+@code {
+    private ContactModel contact = new ContactModel();
+
+    private void SubmitContactForm()
+    {
+        // Logic to handle form submission goes here (e.g., send email or save to database)
+        Console.WriteLine($"Name: {contact.Name}, Email: {contact.Email}, Message: {contact.Message}");
+        // Reset form after submission
+        contact = new ContactModel();
+    }
+
+    public class ContactModel
+    {
+        public string? Name { get; set; }
+        public string? Email { get; set; }
+        public string? Message { get; set; }
+    }
+}
+
+
+
