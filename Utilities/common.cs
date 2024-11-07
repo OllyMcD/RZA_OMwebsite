@@ -30,47 +30,9 @@ namespace RZA_OMwebsite.Utilities
                 return sb.ToString();
             }
         }
-
-        // Point-based password strength evaluation
-        public static string CheckPasswordStrength(string password)
-        {
-            int score = 0;
-
-            // Length points
-            if (password.Length >= 8) score++;
-            if (password.Length >= 12) score++;
-
-            // Contains uppercase and lowercase letters
-            if (password.Any(char.IsUpper)) score++;
-            if (password.Any(char.IsLower)) score++;
-
-            // Contains numbers
-            if (password.Any(digits.Contains)) score++;
-
-            // Contains special characters
-            if (password.Any(specialCharacters.Contains)) score++;
-
-            // Assign strength rating based on score
-            return score switch
-            {
-                1 => "Very Weak",
-                2 => "Weak",
-                3 => "Medium",
-                4 => "Strong",
-                >= 5 => "Very Strong",
-                <= 0 => "Unknown"
-            };
-        }
-
-        // Checks if a password is strong or very strong
-        public static bool IsStrongPassword(string password)
-        {
-            return CheckPasswordStrength(password) is "Strong" or "Very Strong";
-        }
     }
-
     public class UserSession
     {
-        public int UserId { get; set; }
+        public int customerId { get; set; }
     }
 }

@@ -83,27 +83,17 @@ namespace RZA_OMwebsite.Services
             }
         }
 
-        // Validate current password for a customer
-        public async Task<bool> ValidateCurrentPasswordAsync(string username, string oldPassword)
-        {
-            var customer = await GetCustomerByUsernameAsync(username);
-            if (customer == null) return false;
-
-            string hashedInputPassword = PasswordUtils.HashPassword(oldPassword);
-            return customer.Password == hashedInputPassword;
-        }
-
         // Change password for a customer
-        public async Task<bool> ChangePasswordAsync(string username, string newPassword)
+          public async Task ChangePassword(int customerId, string hashedOldPassword, string hashedNewPassword)
         {
-            var customer = await GetCustomerByUsernameAsync(username);
-            if (customer == null) return false;
-
-            customer.Password = PasswordUtils.HashPassword(newPassword);
-            _context.Customers.Update(customer);
-            await _context.SaveChangesAsync();
-
-            return true;
+            Customer? customer = await _context.Customers.SingleOrDefaultAsync(
+                c => c.CustomerId == customerId && 
+                c.Password == hashedOldPassword);
+            if (customer != null)
+            {
+                customer.Password = hashedNewPassword;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

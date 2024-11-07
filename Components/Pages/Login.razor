@@ -40,12 +40,14 @@
 
         var hashedPassword = PasswordUtils.HashPassword(password);
 
-        // Call the CustomerService to validate login
-        bool loginSuccess = await CustomerService.ValidateLoginAsync(username, hashedPassword);
+        // Attempt to log in and retrieve the customer object if successful
+        var customer = await CustomerService.ValidateLoginAsync(username, hashedPassword);
 
-        if (loginSuccess)
+        if (customer != null)
         {
-            AuthService.Login(username); // Use AuthService.Login to set login state and username
+            // Set the user as logged in with AuthService and store the customer ID in UserSession
+            AuthService.Login(username); // Set login state and username
+
             message = "Login successful!";
             alertSeverity = Severity.Success;
             Navigation.NavigateTo("/main"); // Redirect to main page
