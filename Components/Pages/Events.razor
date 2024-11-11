@@ -1,8 +1,10 @@
 ﻿@page "/events"
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
 @using MudBlazor
 @inject AuthService AuthService
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
+@inject PageService PageService
 
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
     <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
@@ -12,7 +14,7 @@
         @if (!AuthService.isLoggedIn)
         {
             <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/"))">Go to Home</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/"))">Go to Home</MudButton>
         }
         else
         {
@@ -51,16 +53,32 @@
 </MudContainer>
 
 @code {
+
+    private bool first = true;
+
     protected override async Task OnInitializedAsync()
     {
         if (!CheckLoginStatus())
         {
-            Navigation.NavigateTo("/"); // Redirect to home if not logged in
+            NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
         }
     }
 
     private bool CheckLoginStatus()
     {
         return AuthService.isLoggedIn; // Check the login status
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
     }
 }

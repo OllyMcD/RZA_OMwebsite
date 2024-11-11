@@ -1,8 +1,10 @@
 ﻿@page "/main"
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
 @using MudBlazor
+@inject PageService PageService
 @inject AuthService AuthService
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
 
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
 
@@ -26,7 +28,7 @@
                         <MudText Typo="Typo.body2">Your next adventure is waiting! Book your experience now.</MudText>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => Navigation.NavigateTo("/booking"))">Book Now</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/booking"))">Book Now</MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudItem>
@@ -40,7 +42,7 @@
                         <MudText Typo="Typo.body2">Join us for our exclusive events and activities. Explore the list!</MudText>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => Navigation.NavigateTo("/events"))">Explore Events</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/events"))">Explore Events</MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudItem>
@@ -54,7 +56,7 @@
                         <MudText Typo="Typo.body2">Got any questions or need assistance? Our team is here to help.</MudText>
                     </MudCardContent>
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => Navigation.NavigateTo("/contact"))">Contact Us</MudButton>
+                        <MudButton Variant="Variant.Filled" Color="Color.Info" OnClick="@(() => NavigationManager.NavigateTo("/contact"))">Contact Us</MudButton>
                     </MudCardActions>
                 </MudCard>
             </MudItem>
@@ -99,6 +101,7 @@
 
 @code {
     private bool isLoggedIn;
+    private bool first = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -106,7 +109,20 @@
 
         if (!isLoggedIn)
         {
-            Navigation.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
         }
     }
 

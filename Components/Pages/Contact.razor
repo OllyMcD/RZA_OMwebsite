@@ -1,7 +1,9 @@
 ﻿@page "/contact"
 @using MudBlazor
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
 @inject NavigationManager NavigationManager
+@inject PageService PageService
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4">
     <MudText Typo="Typo.h4" Align="Align.Center">Contact Us</MudText>
@@ -13,9 +15,9 @@
             <MudText Typo="Typo.h5">Get in Touch</MudText>
             <MudDivider Class="my-2" />
             <MudText Typo="Typo.body1">You can reach us through the following channels:</MudText>
-            <MudText Typo="Typo.body1"><strong>Email:</strong> support@example.com</MudText>
-            <MudText Typo="Typo.body1"><strong>Phone:</strong> +1 234 567 890</MudText>
-            <MudText Typo="Typo.body1"><strong>Address:</strong> 123 Example St, City, Country</MudText>
+            <MudText Typo="Typo.body1"><strong>Email:</strong> RigetZooAdv@amess.com</MudText>
+            <MudText Typo="Typo.body1"><strong>Phone:</strong> +44 7494275135</MudText>
+            <MudText Typo="Typo.body1"><strong>Address:</strong> South Lakes Safari Zoo, Melton Ter, Lindal in Furness, Ulverston LA12 0LU</MudText>
         </MudCardContent>
     </MudCard>
 
@@ -28,11 +30,12 @@
                     height="300"
                     style="border:0;"
                     loading="lazy"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345095247!2d144.95373531531912!3d-37.81627997975146!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f10f35f%3A0x5045675218cee40!2sExample%20Company!5e0!3m2!1sen!2sus!4v1629298550784!5m2!1sen!2sus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2335.6667676585666!2d-3.1659588232177!3d54.16826637253908!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487ca59e55b29ee3%3A0x5c7cc5ceeb47cb3b!2sSouth%20Lakes%20Safari%20Zoo!5e0!3m2!1sen!2suk!4v1731069953658!5m2!1sen!2suk"
                     allowfullscreen>
             </iframe>
         </MudCardContent>
     </MudCard>
+
 
     <!-- Contact Form Section -->
     <MudCard Class="mb-4">
@@ -115,6 +118,23 @@
         public string? Name { get; set; }
         public string? Email { get; set; }
         public string? Message { get; set; }
+    }
+
+    private bool first = true;
+
+    protected override async Task OnInitializedAsync() { }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
     }
 }
 

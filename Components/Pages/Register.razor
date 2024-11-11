@@ -2,7 +2,10 @@
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Models
+@using RZA_OMwebsite.Pages
 @inject CustomerService CustomerService
+@inject PageService PageService
+@inject NavigationManager NavigationManager
 
 <br />
 <br />
@@ -11,11 +14,11 @@
     <MudText Typo="Typo.h4" Align="Align.Center">Register</MudText>
 
     <MudForm>
-        <MudTextField Label="Username" @bind-Value="newCustomer.Username" Required="true" Class="mb-3" />
-        <MudTextField Label="Password" @bind-Value="newCustomer.Password" InputType="InputType.Password" Required="true" Class="mb-3" />
-        <MudTextField Label="First Name" @bind-Value="newCustomer.FirstName" Required="true" Class="mb-3" />
-        <MudTextField Label="Last Name" @bind-Value="newCustomer.LastName" Required="true" Class="mb-3" />
-        <MudTextField Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" />
+        <MudTextField Label="Username" @bind-Value="newCustomer.Username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Label="Password" @bind-Value="newCustomer.Password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Label="First Name" @bind-Value="newCustomer.FirstName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Label="Last Name" @bind-Value="newCustomer.LastName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true">Register</MudButton>
     </MudForm>
 
@@ -26,6 +29,7 @@
 </MudPaper>
 
 @code {
+    private bool first = true;
     private Customer newCustomer = new Customer();
     private string message = string.Empty; // Initialize with an empty string
     private Severity alertSeverity;
@@ -55,11 +59,33 @@
             message = "Registration successful!";
             alertSeverity = Severity.Success;
             newCustomer = new Customer();
+            NavigationManager.NavigateTo("/login");
         }
         else
         {
             message = "Username already exists. Please choose another.";
             alertSeverity = Severity.Error;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await RegisterCustomer();
         }
     }
 }

@@ -2,9 +2,11 @@
 @using MudBlazor
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Models
+@using RZA_OMwebsite.Pages
 @inject NavigationManager NavigationManager
 @inject CustomerService CustomerService
 @inject AuthService AuthService
+@inject PageService PageService
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4">
     <MudText Typo="Typo.h4" Align="Align.Center">Account Status</MudText>
@@ -137,5 +139,20 @@
     {
         AuthService.Logout();
         NavigationManager.NavigateTo("/login"); // Redirect to login page
+    }
+
+    private bool first = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
     }
 }

@@ -1,9 +1,12 @@
 ﻿@page "/login"
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Utilities
+@using RZA_OMwebsite.Pages
 @inject AuthService AuthService
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
 @inject CustomerService CustomerService
+@inject PageService PageService
+@inject UserSession UserSession
 
 <br />
 <br />
@@ -12,8 +15,8 @@
     <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
 
     <MudForm>
-        <MudTextField Label="Username" @bind-Value="username" Required="true" Class="mb-3" />
-        <MudTextField Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" />
+        <MudTextField Label="Username" @bind-Value="username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
     </MudForm>
 
@@ -26,8 +29,35 @@
 @code {
     private string? username;
     private string? password;
+    private string? specialCodeEntered = string.Empty; // Store the code being entered
     private string message = string.Empty;
+    private bool first = true;
     private Severity alertSeverity;
+
+    // Handle keypress globally and capture the 4-digit code
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await LoginUser();  // Trigger login when Enter key is pressed
+        }
+        else
+        {
+            // Collect typed keys for the special code
+            if (specialCodeEntered.Length < 4) // Only collect 11 digits
+            {
+                specialCodeEntered += e.Key;
+            }
+
+            // If the 4-digit code is entered, check if it's correct
+            if (specialCodeEntered == "1234")  // Change "1234" to your secret code
+            {
+                message = "Special code entered! Redirecting to special page.";
+                alertSeverity = Severity.Success;
+                NavigationManager.NavigateTo("/c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f"); // Redirect to special page
+            }
+        }
+    }
 
     private async Task LoginUser()
     {
@@ -43,19 +73,45 @@
         // Attempt to log in and retrieve the customer object if successful
         var customer = await CustomerService.ValidateLoginAsync(username, hashedPassword);
 
-        if (customer != null)
+        if (customer != false) // Corrected this line to check for FALSE
         {
             // Set the user as logged in with AuthService and store the customer ID in UserSession
             AuthService.Login(username); // Set login state and username
 
             message = "Login successful!";
             alertSeverity = Severity.Success;
-            Navigation.NavigateTo("/main"); // Redirect to main page
+            NavigationManager.NavigateTo("/main"); // Redirect to main page
         }
         else
         {
             message = "Invalid username or password.";
             alertSeverity = Severity.Error;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // if (UserSession.customerId == 0)
+        // {
+        //     NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
+        // }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        return AuthService.isLoggedIn; // Check the login status
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
         }
     }
 }

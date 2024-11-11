@@ -1,5 +1,7 @@
 ﻿@page "/"
-
+@inject NavigationManager NavigationManager
+@using RZA_OMwebsite.Pages
+@inject PageService PageService
 
 <body>
 <MudCarousel Class="mud-width-full" Style="height:830px;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
@@ -34,6 +36,20 @@
     private bool enableSwipeGesture = false;
     private bool autocycle = true;
     private Transition transition = Transition.Fade;
+    private bool first = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
+    }
 }
 
 <style>
@@ -42,12 +58,12 @@
         background-color: #004d40; /* Deep teal for a professional feel */
         color: white;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for smoothness */
-    }  
+    }
 
 
     .MudContainer {
         background-color: darkslateblue; /* Deep teal for a professional feel */
         color: white;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for smoothness */       
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for smoothness */
     }
 </style>

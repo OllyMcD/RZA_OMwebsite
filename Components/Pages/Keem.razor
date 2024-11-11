@@ -1,0 +1,89 @@
+﻿@page "/c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f"
+@using MudBlazor
+@using RZA_OMwebsite.Pages
+@using Services
+@using Utilities
+@inject PageService PageService
+@inject CustomerService CustomerService
+
+<MudPaper Class="pa-4" Elevation="2">
+    <MudText Typo="Typo.h4" Align="Align.Center">Admin Dashboard</MudText>
+</MudPaper>
+
+<MudContainer Class="mt-4" AlignItems="Align.Center">
+    <!-- Analytics Widgets -->
+    <MudGrid Class="mt-4" Justify="Justify.SpaceBetween">
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Class="pa-3" Elevation="3">
+                <MudText Typo="Typo.h6">Active Users</MudText>
+                <MudText Typo="Typo.subtitle1">@activeUsersCount</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Class="pa-3" Elevation="3">
+                <MudText Typo="Typo.h6">Page Views</MudText>
+                <MudText Typo="Typo.subtitle1">@pageViewsCount</MudText>
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudPaper Class="pa-3" Elevation="3">
+                <MudText Typo="Typo.h6">New Users (Last 30 Days)</MudText>
+                <MudText Typo="Typo.subtitle1">@newUsersCount</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+    <!-- User Management Section -->
+    <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-4">User Management</MudText>
+    <MudForm>
+        <MudTextField Label="Username" @bind-Value="newUsername" Required="true" Class="mb-3" />
+        <MudTextField Label="Password" @bind-Value="newPassword" InputType="InputType.Password" Required="true" Class="mb-3" />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddCustomer" Class="mt-3" FullWidth="true">Add Customer</MudButton>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+        }
+    </MudForm>
+</MudContainer>
+
+@code {
+    private string? newUsername;
+    private string? newPassword;
+    private int activeUsersCount = 0;
+    private int pageViewsCount = 0;
+    private int newUsersCount = 0;
+    private string message = string.Empty;
+    private Severity alertSeverity;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Retrieve simulated analytics data
+        activeUsersCount = await PageService.GetActiveUserCountAsync();
+        pageViewsCount = await PageService.GetPageViewsCountAsync();
+        newUsersCount = await PageService.GetNewUserCountAsync();
+    }
+
+    private async Task AddCustomer()
+    {
+        if (string.IsNullOrWhiteSpace(newUsername) || string.IsNullOrWhiteSpace(newPassword))
+        {
+            message = "Username and password are required.";
+            alertSeverity = Severity.Warning;
+            return;
+        }
+
+        var customer = new Models.Customer { Username = newUsername, Password = PasswordUtils.HashPassword(newPassword) };
+        var result = await CustomerService.AddCustomerAsync(customer);
+
+        if (result)
+        {
+            message = "Customer added successfully.";
+            alertSeverity = Severity.Success;
+        }
+        else
+        {
+            message = "Error: Username already exists.";
+            alertSeverity = Severity.Error;
+        }
+    }
+}

@@ -5,6 +5,7 @@ using MudBlazor.Services;
 using MudBlazor;
 using RZA_OMwebsite.Services;
 using RZA_OMwebsite.Utilities;
+using RZA_OMwebsite.Pages;
 
 namespace RZA_OMwebsite
 {
@@ -40,6 +41,7 @@ namespace RZA_OMwebsite
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<UserSession>();
+            builder.Services.AddScoped<PageService>(); 
             
 
             #endregion

@@ -1,9 +1,11 @@
 ﻿@page "/changePassword"
 @using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
 @inject UserSession UserSession
 @inject CustomerService CustomerService
-@inject NavigationManager Navigation
+@inject NavigationManager NavigationManager
+@inject PageService PageService
 @inject ISnackbar Snackbar
 
 @rendermode InteractiveServer
@@ -38,9 +40,10 @@
 </MudPaper>
 
 @code {
-    private string newPassword;
-    private string oldPassword;
-    private string oldPasswordConfirm;
+    private string? newPassword;
+    private string? oldPassword;
+    private string? oldPasswordConfirm;
+    private bool first = true;
     private async Task ChangePassword()
     {
         if (oldPassword == oldPasswordConfirm)
@@ -50,11 +53,27 @@
         string hashedOldPassword = PasswordUtils.HashPassword(oldPassword); 
         await CustomerService.ChangePassword(UserSession.customerId, hashedOldPassword, hashedNewPassword);            
         Snackbar.Add("Password changed successfully!", Severity.Success);
-        Navigation.NavigateTo("/account-status");
+        NavigationManager.NavigateTo("/account-status");
         }
         else
         {
             Snackbar.Add("Old passwords do not match. Please try again.", Severity.Error);
         }
     }
+
+    protected override async Task OnInitializedAsync() { }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
+    }
+
 }

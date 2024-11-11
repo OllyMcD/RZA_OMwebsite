@@ -1,6 +1,9 @@
 ﻿@page "/accessibility"
 @using MudBlazor
+@using RZA_OMwebsite.Pages
+@inject PageService PageService
 @inject NavigationManager NavigationManager
+
 
 <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
     <MudText Typo="Typo.h4" Align="Align.Center">Settings</MudText>
@@ -37,10 +40,26 @@
 @code {
     private bool highContrastEnabled = false;
     private double textSize = 16;
+    private bool first = true;
 
     private void NavigateToAccountStatus()
     {
         // Use NavigationManager to navigate to the AccountStatus page
         NavigationManager.NavigateTo("/account-status");
+    }
+
+    protected override async Task OnInitializedAsync() {}
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
     }
 }

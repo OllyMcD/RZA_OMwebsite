@@ -16,24 +16,67 @@ public partial class TlS2303831RzaContext : DbContext
     {
     }
 
+    public virtual DbSet<Animal> Animals { get; set; }
+
+    public virtual DbSet<Animallocation> Animallocations { get; set; }
+
     public virtual DbSet<Attraction> Attractions { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }
+
+    public virtual DbSet<Matchanimal> Matchanimals { get; set; }
 
     public virtual DbSet<Room> Rooms { get; set; }
 
     public virtual DbSet<Roombooking> Roombookings { get; set; }
 
+    public virtual DbSet<Stat> Stats { get; set; }
+
     public virtual DbSet<Ticket> Tickets { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseMySql("name=MySqlConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+    public virtual DbSet<Zoo> Zoos { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseMySql("name=MySqlConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
             .UseCollation("utf8mb4_0900_ai_ci")
             .HasCharSet("utf8mb4");
+
+        modelBuilder.Entity<Animal>(entity =>
+        {
+            entity.HasKey(e => e.AnimalId).HasName("PRIMARY");
+
+            entity.ToTable("animal");
+
+            entity.Property(e => e.AnimalId).HasColumnName("AnimalID");
+            entity.Property(e => e.IndividualName).HasMaxLength(255);
+            entity.Property(e => e.Sex).HasColumnType("enum('Male','Female')");
+            entity.Property(e => e.Species).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<Animallocation>(entity =>
+        {
+            entity.HasKey(e => new { e.AnimalId, e.ZooName, e.DateArrived })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
+
+            entity.ToTable("animallocation");
+
+            entity.HasIndex(e => e.ZooName, "ZooName");
+
+            entity.Property(e => e.AnimalId).HasColumnName("AnimalID");
+
+            entity.HasOne(d => d.Animal).WithMany(p => p.Animallocations)
+                .HasForeignKey(d => d.AnimalId)
+                .HasConstraintName("animallocation_ibfk_1");
+
+            entity.HasOne(d => d.ZooNameNavigation).WithMany(p => p.Animallocations)
+                .HasForeignKey(d => d.ZooName)
+                .HasConstraintName("animallocation_ibfk_2");
+        });
 
         modelBuilder.Entity<Attraction>(entity =>
         {
@@ -108,6 +151,28 @@ public partial class TlS2303831RzaContext : DbContext
                     });
         });
 
+        modelBuilder.Entity<Matchanimal>(entity =>
+        {
+            entity.HasKey(e => new { e.AnimalFemaleId, e.AnimalMaleId, e.DateOfMatch })
+                .HasName("PRIMARY")
+                .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0, 0 });
+
+            entity.ToTable("matchanimal");
+
+            entity.HasIndex(e => e.AnimalMaleId, "AnimalMaleID");
+
+            entity.Property(e => e.AnimalFemaleId).HasColumnName("AnimalFemaleID");
+            entity.Property(e => e.AnimalMaleId).HasColumnName("AnimalMaleID");
+
+            entity.HasOne(d => d.AnimalFemale).WithMany(p => p.MatchanimalAnimalFemales)
+                .HasForeignKey(d => d.AnimalFemaleId)
+                .HasConstraintName("matchanimal_ibfk_1");
+
+            entity.HasOne(d => d.AnimalMale).WithMany(p => p.MatchanimalAnimalMales)
+                .HasForeignKey(d => d.AnimalMaleId)
+                .HasConstraintName("matchanimal_ibfk_2");
+        });
+
         modelBuilder.Entity<Room>(entity =>
         {
             entity.HasKey(e => e.RoomNumber).HasName("PRIMARY");
@@ -149,6 +214,18 @@ public partial class TlS2303831RzaContext : DbContext
                 .HasConstraintName("roombookings_ibfk_2");
         });
 
+        modelBuilder.Entity<Stat>(entity =>
+        {
+            entity.HasKey(e => e.PageUrl).HasName("PRIMARY");
+
+            entity.ToTable("stats");
+
+            entity.HasIndex(e => e.PageUrl, "Page_url_UNIQUE").IsUnique();
+
+            entity.Property(e => e.PageUrl).HasColumnName("Page_url");
+            entity.Property(e => e.PageViews).HasColumnName("Page_views");
+        });
+
         modelBuilder.Entity<Ticket>(entity =>
         {
             entity.HasKey(e => e.TicketId).HasName("PRIMARY");
@@ -164,6 +241,16 @@ public partial class TlS2303831RzaContext : DbContext
                 .HasForeignKey(d => d.AttractionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("attractionID");
+        });
+
+        modelBuilder.Entity<Zoo>(entity =>
+        {
+            entity.HasKey(e => e.ZooName).HasName("PRIMARY");
+
+            entity.ToTable("zoo");
+
+            entity.Property(e => e.Country).HasMaxLength(255);
+            entity.Property(e => e.Town).HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

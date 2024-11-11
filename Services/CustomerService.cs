@@ -10,7 +10,7 @@ namespace RZA_OMwebsite.Services
 {
     public class CustomerService
     {
-        private readonly TlS2303831RzaContext _context; // Your DbContext
+        private readonly TlS2303831RzaContext _context; 
 
         public CustomerService(TlS2303831RzaContext context)
         {
@@ -31,33 +31,52 @@ namespace RZA_OMwebsite.Services
         // Add new customer if the username does not already exist
         public async Task<bool> AddCustomerAsync(Customer customer)
         {
-            // Check if the username exists
-            if (await UsernameExistsAsync(customer.Username))
+            try
             {
-                return false; // Username already exists
+                // Check if the username exists
+                if (await UsernameExistsAsync(customer.Username))
+                {
+                    return false; // Username already exists
+                }
+
+
+                // Hash the password before saving
+                //customer.Password = PasswordUtils.HashPassword(customer.Password);
+                await _context.Customers.AddAsync(customer);
+                await _context.SaveChangesAsync();
+
+                return true; // Customer successfully added
             }
-
-            // Hash the password before saving
-            customer.Password = PasswordUtils.HashPassword(customer.Password);
-            await _context.Customers.AddAsync(customer);
-            await _context.SaveChangesAsync();
-
-            return true; // Customer successfully added
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+           
         }
 
         // Validate login credentials
         public async Task<bool> ValidateLoginAsync(string username, string password)
         {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
-            if (customer != null)
+            try
             {
-                var hashedInputPassword = PasswordUtils.HashPassword(password);
-                if (customer.Password == hashedInputPassword)
+                var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
+                if (customer != null)
                 {
-                    return true; // Login successful
+                    //var hashedInputPassword = PasswordUtils.HashPassword(password);
+                    if (customer.Password == password)
+                    {
+                        return true; // Login successful
+                    }
                 }
+                return false; // Login failed
             }
-            return false; // Login failed
+            catch (Exception)
+            {
+                Console.WriteLine("error");
+                return false;
+            }
+
         }
 
         // Get customer by username
@@ -95,5 +114,6 @@ namespace RZA_OMwebsite.Services
                 await _context.SaveChangesAsync();
             }
         }
+
     }
 }
