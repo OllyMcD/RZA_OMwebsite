@@ -32,8 +32,20 @@
                   @bind-Value="newPassword"
                   Required="true"
                   Adornment="Adornment.Start"
-                  Icon="@Icons.Material.Filled.Lock" />
+                  Icon="@Icons.Material.Filled.Lock"
+                  OnInput="@( (ChangeEventArgs _) => CheckPasswordStrength() )" />
+
     <br />
+
+    <!-- Password Strength Checklist -->
+    <ul>
+        <li>@(passwordLengthMet ? "✔️" : "❌") At least 8 characters</li>
+        <li>@(hasUpperCase ? "✔️" : "❌") At least one uppercase letter</li>
+        <li>@(hasLowerCase ? "✔️" : "❌") At least one lowercase letter</li>
+        <li>@(hasNumber ? "✔️" : "❌") At least one number</li>
+        <li>@(hasSpecialChar ? "✔️" : "❌") At least one special character</li>
+    </ul>
+
     <MudButton OnClick="@ChangePassword" Color="Color.Primary" Variant="Variant.Filled">
         Change Password
     </MudButton>
@@ -43,17 +55,25 @@
     private string? newPassword;
     private string? oldPassword;
     private string? oldPasswordConfirm;
-    private bool first = true;
+
+    // Validation flags
+    private bool passwordLengthMet = false;
+    private bool hasUpperCase = false;
+    private bool hasLowerCase = false;
+    private bool hasNumber = false;
+    private bool hasSpecialChar = false;
+
+    private bool firstRender = true;
+
     private async Task ChangePassword()
     {
         if (oldPassword == oldPasswordConfirm)
         {
-            
-        string hashedNewPassword = PasswordUtils.HashPassword(newPassword);
-        string hashedOldPassword = PasswordUtils.HashPassword(oldPassword); 
-        await CustomerService.ChangePassword(UserSession.customerId, hashedOldPassword, hashedNewPassword);            
-        Snackbar.Add("Password changed successfully!", Severity.Success);
-        NavigationManager.NavigateTo("/account-status");
+            string hashedNewPassword = PasswordUtils.HashPassword(newPassword);
+            string hashedOldPassword = PasswordUtils.HashPassword(oldPassword);
+            await CustomerService.ChangePassword(UserSession.customerId, hashedOldPassword, hashedNewPassword);
+            Snackbar.Add("Password changed successfully!", Severity.Success);
+            NavigationManager.NavigateTo("/account-status");
         }
         else
         {
@@ -61,19 +81,30 @@
         }
     }
 
-    protected override async Task OnInitializedAsync() { }
+    private void CheckPasswordStrength()
+    {
+        if (!string.IsNullOrEmpty(newPassword))
+        {
+            passwordLengthMet = newPassword.Length >= 8;
+            hasUpperCase = newPassword.Any(char.IsUpper);
+            hasLowerCase = newPassword.Any(char.IsLower);
+            hasNumber = newPassword.Any(char.IsDigit);
+            hasSpecialChar = newPassword.Any(ch => !char.IsLetterOrDigit(ch));
+        }
+        else
+        {
+            passwordLengthMet = hasUpperCase = hasLowerCase = hasNumber = hasSpecialChar = false;
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
             var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
             await PageService.TrackPageViewAsync(currentPageUrl);
-            first = false;
+            this.firstRender = false;
         }
     }
-
 }
+

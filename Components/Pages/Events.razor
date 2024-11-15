@@ -18,43 +18,202 @@
         }
         else
         {
-            <MudText Typo="Typo.body1" Align="Align.Center">Here are some exciting events coming up:</MudText>
+            <MudText Typo="Typo.body1" Align="Align.Center">Discover our exciting lineup of events:</MudText>
 
-            <MudGrid Spacing="4" Justify="Justify.Center">
-                <MudItem xs="12" sm="6" md="4">
-                    <MudCard>
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">🐾 Animal Encounter Day</MudText>
-                            <MudText Typo="Typo.body2">Join us for a close-up experience with our wildlife on March 15th!</MudText>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-
-                <MudItem xs="12" sm="6" md="4">
-                    <MudCard>
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">🌳 Eco-Fair</MudText>
-                            <MudText Typo="Typo.body2">Discover sustainable practices and eco-friendly products on April 22nd!</MudText>
-                        </MudCardContent>
-                    </MudCard>
-                </MudItem>
-
-                <MudItem xs="12" sm="6" md="4">
-                    <MudCard>
-                        <MudCardContent>
-                            <MudText Typo="Typo.h5">🎉 Family Fun Day</MudText>
-                            <MudText Typo="Typo.body2">Enjoy games, food, and activities for all ages on May 5th!</MudText>
-                        </MudCardContent>
-                    </MudCard>
+            <!-- Event Filters -->
+            <MudGrid Justify="Justify.Center" Class="my-4">
+                <MudItem>
+                    <MudSelect @bind-Value="selectedCategory" Label="Filter by Category" T="string" Placeholder="Please Select" Style="width: 200px;">
+                        <MudSelectItem Value="@("All")">All Events</MudSelectItem>
+                        <MudSelectItem Value="@("Workshops")">Workshops</MudSelectItem>
+                        <MudSelectItem Value="@("Family")">Family Activities</MudSelectItem>
+                        <MudSelectItem Value="@("Eco")">Eco-Friendly</MudSelectItem>
+                    </MudSelect>
                 </MudItem>
             </MudGrid>
         }
     </MudPaper>
+    <br />
+
+    @if (selectedCategory == "All")
+    {
+        <!-- Event Highlights for All Categories -->
+        <MudGrid Spacing="4" Justify="Justify.Center">
+            <!-- All Events Combined Here -->
+            @foreach (var eventItem in allEvents)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@eventItem.Name</MudText>
+                            <MudText Typo="Typo.body2">@eventItem.Description</MudText>
+                            <MudDivider Class="my-1" />
+                            <MudButton Variant="Variant.Text" OnClick="@(() => RSVPEvent(eventItem.Name))">RSVP Now</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else if (selectedCategory == "Eco")
+    {
+        <!-- Event Highlights for Eco Category -->
+        <MudGrid Spacing="4" Justify="Justify.Center">
+            @foreach (var ecoEvent in ecoEvents)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@ecoEvent.Name</MudText>
+                            <MudText Typo="Typo.body2">@ecoEvent.Description</MudText>
+                            <MudDivider Class="my-1" />
+                            <MudButton Variant="Variant.Text" OnClick="@(() => RSVPEvent(ecoEvent.Name))">RSVP Now</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else if (selectedCategory == "Workshops")
+    {
+        <!-- Event Highlights for Workshops Category -->
+        <MudGrid Spacing="4" Justify="Justify.Center">
+            @foreach (var workshop in workshops)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@workshop.Name</MudText>
+                            <MudText Typo="Typo.body2">@workshop.Description</MudText>
+                            <MudDivider Class="my-1" />
+                            <MudButton Variant="Variant.Text" OnClick="@(() => RSVPEvent(workshop.Name))">RSVP Now</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else if (selectedCategory == "Family")
+    {
+        <!-- Event Highlights for Family Category -->
+        <MudGrid Spacing="4" Justify="Justify.Center">
+            @foreach (var familyEvent in familyEvents)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@familyEvent.Name</MudText>
+                            <MudText Typo="Typo.body2">@familyEvent.Description</MudText>
+                            <MudDivider Class="my-1" />
+                            <MudButton Variant="Variant.Text" OnClick="@(() => RSVPEvent(familyEvent.Name))">RSVP Now</MudButton>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+
+    <!-- Thematic Decorations -->
+    <MudPaper Class="pa-4 my-4" Style="background-color: #FFEEAA; border: 2px dashed #FF8800;">
+        <MudText Typo="Typo.h5" Align="Align.Center">🌟 Seasonal Event: Summer Safari</MudText>
+        <MudText Typo="Typo.body2" Align="Align.Center">
+            Join us for an adventurous safari experience throughout June!
+        </MudText>   
+    </MudPaper>
+
+     <!-- Event Calendar Section -->
+    <MudPaper Class="pa-4 my-4">
+        <MudText Typo="Typo.h6" Align="Align.Center">📅 Event Calendar</MudText>
+
+        <!-- Calendar Header: Days of the Week -->
+        <MudGrid Spacing="2">
+            @foreach (var day in new[] { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" })
+            {
+                <MudItem xs="1">
+                    <MudText Typo="Typo.body2" Align="Align.Center"><strong>@day</strong></MudText>
+                </MudItem>
+            }
+        </MudGrid>
+
+        <!-- Calendar Body: Days and Events -->
+        <MudGrid Spacing="2">
+            @for (var week = 0; week < 5; week++)  
+            {
+                @for (var day = 0; day < 7; day++)  
+                {
+                    var dayIndex = (week * 7) + day + 1;  <!-- Day index, assuming 1-31 days -->
+                    var eventForDay = allEvents.FirstOrDefault(e => e.Name.Contains(dayIndex.ToString()));  <!-- Check for events -->
+
+                    <MudItem xs="1">
+                        <MudCard Class="d-flex justify-center align-center" Style="height: 100px; border: 1px solid #ccc; background-color: #f9f9f9;">
+                            <MudText Typo="Typo.body2" Align="Align.Center">
+                                @dayIndex
+                                @if (eventForDay != null)
+                                {
+                                    <br />
+                                    <span class="text-primary">@eventForDay.Name</span>  <!-- Display event name -->
+                                }
+                            </MudText>
+                        </MudCard>
+                    </MudItem>
+                }
+            }
+        </MudGrid>
+    </MudPaper>
 </MudContainer>
 
-@code {
 
+
+@code {
     private bool first = true;
+    private string selectedCategory = "All"; // Default to "All"
+
+    // Example event data for various categories
+    private List<EventItem> allEvents = new List<EventItem>
+{
+    new EventItem { Name = "🐾 Animal Encounter Day", Description = "Join us for a close-up experience with wildlife on March 15th!" },
+    new EventItem { Name = "🌍 Eco-Fair", Description = "Discover sustainable practices and eco-friendly products on April 22nd!" },
+    new EventItem { Name = "🌱 Composting 101", Description = "Learn composting techniques for a greener world! April 15th" },
+    new EventItem { Name = "♻️ Recycling Awareness Day", Description = "Join us to learn about the importance of recycling! June 2nd" },
+    new EventItem { Name = "🌳 Tree Planting Initiative", Description = "Help us plant trees to create a greener future! May 10th" },
+    new EventItem { Name = "👨‍👩‍👧‍👦 Family Fun Day", Description = "Enjoy games, food, and activities for all ages on May 5th!" },
+    new EventItem { Name = "📸 Wildlife Photography", Description = "Learn how to capture amazing wildlife photos! May 12th" },
+    new EventItem { Name = "🌿 Sustainable Gardening", Description = "Explore eco-friendly gardening techniques on April 10th" },
+    new EventItem { Name = "📷 Nature Photography Basics", Description = "Get tips on taking nature photos! March 20th" },
+    new EventItem { Name = "🎨 Family Art Day", Description = "Enjoy a day of art and crafts for all ages on June 5th" },
+    new EventItem { Name = "🍉 Family Picnic Day", Description = "Join us for a relaxing day in the park with games and food! May 20th" },
+    new EventItem { Name = "🐐 Petting Zoo Day", Description = "Bring the kids for a fun day with friendly animals on July 3rd" }
+};
+
+    private List<EventItem> ecoEvents = new List<EventItem>
+{
+    new EventItem { Name = "🌍 Eco-Fair", Description = "Discover sustainable practices and eco-friendly products on April 22nd!" },
+    new EventItem { Name = "🌱 Composting 101", Description = "Learn composting techniques for a greener world! April 15th" },
+    new EventItem { Name = "♻️ Recycling Awareness Day", Description = "Join us to learn about the importance of recycling! June 2nd" },
+    new EventItem { Name = "🌳 Tree Planting Initiative", Description = "Help us plant trees to create a greener future! May 10th" }
+};
+
+    private List<EventItem> workshops = new List<EventItem>
+{
+    new EventItem { Name = "📸 Wildlife Photography", Description = "Learn how to capture amazing wildlife photos! May 12th" },
+    new EventItem { Name = "🌿 Sustainable Gardening", Description = "Explore eco-friendly gardening techniques on April 10th" },
+    new EventItem { Name = "📷 Nature Photography Basics", Description = "Get tips on taking nature photos! March 20th" }
+};
+
+    private List<EventItem> familyEvents = new List<EventItem>
+{
+    new EventItem { Name = "🎨 Family Art Day", Description = "Enjoy a day of art and crafts for all ages on June 5th" },
+    new EventItem { Name = "🍉 Family Picnic Day", Description = "Join us for a relaxing day in the park with games and food! May 20th" },
+    new EventItem { Name = "🐐 Petting Zoo Day", Description = "Bring the kids for a fun day with friendly animals on July 3rd" },
+    new EventItem { Name = "👨‍👩‍👧‍👦 Family Fun Day", Description = "Enjoy games, food, and activities for all ages on May 5th!" }
+};
+
+
+    public class EventItem
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -73,12 +232,15 @@
     {
         if (firstRender)
         {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
+            var currentPageUrl = NavigationManager.Uri.Substring(22); // Get the current page URL
+            await PageService.TrackPageViewAsync(currentPageUrl); // Track page view
             first = false;
         }
+    }
+
+    private void RSVPEvent(string eventName)
+    {
+        NavigationManager.NavigateTo("/booking");
+        Console.WriteLine($"RSVPed for {eventName}");
     }
 }
