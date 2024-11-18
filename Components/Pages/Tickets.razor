@@ -1,0 +1,116 @@
+﻿@using RZA_OMwebsite.Models
+@using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
+@inject AttractionService AttractionService
+@inject PageService PageService
+@inject NavigationManager NavigationManager
+
+@page "/tickets"
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="shopping-basket">
+
+    <br />
+    
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Basket</MudText>
+
+    <br />
+
+    <MudPaper Elevation="2" Class="basket-items">
+        @if (attractions != null)
+        {
+            @foreach (Attraction attraction in attractions)
+            {
+                <MudItem>
+                    <MudGrid AlignItems="Center" Justify="Justify.Center">
+                        <!-- Attraction Image -->
+                        <MudItem xs="3" Class="d-flex justify-center">
+                            <MudAvatar Size="Size.Large">
+                                <MudImage Src="@GetAttractionImage(attraction.AttractionId)" Alt="@attraction.Name" />
+                            </MudAvatar>
+                        </MudItem>
+
+                        <!-- Attraction Details -->
+                        <MudItem xs="6">
+                            <MudText Typo="Typo.subtitle1">@attraction.Name</MudText>
+                            <MudText Typo="Typo.body2">Price: £@attraction.Price</MudText>
+                        </MudItem>
+
+                        <!-- Add to Basket Button -->
+                        <MudItem xs="3">
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(e => AddTicket(attraction.AttractionId))">
+                                Add to Basket
+                            </MudButton>
+                        </MudItem>
+                    </MudGrid>
+                </MudItem>
+                <MudDivider />
+            }
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Align="Align.Center">No attractions available</MudText>
+        }
+    </MudPaper>
+
+    <!-- Book Tickets Button -->
+    <MudButton Variant="Variant.Filled" Color="Color.Success" FullWidth="true" Class="book-tickets" Style="margin-top: 20px;">
+        Book Tickets
+    </MudButton>
+</MudContainer>
+
+@code {
+
+    private bool first = true;
+
+    List<Attraction> attractions;
+    List<Ticket> tickets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!CheckLoginStatus())
+        {
+            NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
+        }
+        else
+        {
+            attractions = await AttractionService.GetAttractionsAsync();
+            tickets = new List<Ticket>();
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Check the login status
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
+    }
+
+    private void AddTicket(int attractionId)
+    {
+        Ticket newTicket = new Ticket();
+        newTicket.AttractionId = attractionId;
+        newTicket.Date = DateOnly.FromDateTime(DateTime.Now);
+    }
+
+    private void BookTickets()
+    {
+        // Booking logic here
+    }
+
+    private string GetAttractionImage(int attractionId)
+    {
+        return $"images/{attractionId}.jpg";
+    }
+}

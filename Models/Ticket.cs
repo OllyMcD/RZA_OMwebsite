@@ -13,5 +13,5 @@ public partial class Ticket
 
     public virtual Attraction Attraction { get; set; } = null!;
 
-    public virtual ICollection<Customer> Customers { get; set; } = new List<Customer>();
+    public virtual ICollection<Ticketbooking> Ticketbookings { get; set; } = new List<Ticketbooking>();
 }

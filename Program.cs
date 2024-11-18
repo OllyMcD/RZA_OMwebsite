@@ -41,8 +41,11 @@ namespace RZA_OMwebsite
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<UserSession>();
-            builder.Services.AddScoped<PageService>(); 
-            
+            builder.Services.AddScoped<PageService>();
+            builder.Services.AddScoped<AttractionService>();
+            builder.Services.AddScoped<RoombookingService>();
+            builder.Services.AddScoped<RoomService>();
+
 
             #endregion
 

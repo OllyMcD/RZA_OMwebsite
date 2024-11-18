@@ -27,5 +27,5 @@ public partial class Customer
 
     public virtual ICollection<Roombooking> Roombookings { get; set; } = new List<Roombooking>();
 
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+    public virtual ICollection<Ticketbooking> Ticketbookings { get; set; } = new List<Ticketbooking>();
 }

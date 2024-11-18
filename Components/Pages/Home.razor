@@ -43,10 +43,18 @@
         if (firstRender)
         {
             // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
+            try
+            {
+                var currentPageUrl = NavigationManager.Uri.Substring(22);
 
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
+                // Call the method to track the page view
+                await PageService.TrackPageViewAsync(currentPageUrl);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("failed");
+            }
+
             first = false;
         }
     }
