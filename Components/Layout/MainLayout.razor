@@ -1,7 +1,35 @@
 ﻿@inherits LayoutComponentBase
 
-@* Required *@
-<MudThemeProvider />
+<MudThemeProvider Theme ="MyCustomTheme"/>
+
+@code {
+    MudTheme MyCustomTheme = new MudTheme()
+        {
+            PaletteLight = new PaletteLight()
+            {
+                Primary = "#4d8e0f", // Background color
+                Secondary = "#7ab820", // Background color
+                AppbarBackground = "#9aba8b", // Background color
+                Background = "#9aba8b", // Background color
+                Surface = "#7ab820", // Background color
+                TextPrimary = Colors.Shades.Black, // Black text
+                TextSecondary = Colors.Shades.Black, // Black text
+            },
+            PaletteDark = new PaletteDark()
+            {
+                Primary = "#2f5e0a", // Darker green for contrast
+                Secondary = "#537c15", // Dark green
+                AppbarBackground = "#789961", // Muted green
+                Background = "#789961", // Muted green for the dark theme
+                Surface = "#537c15", // Dark green for surface
+                TextPrimary = Colors.Shades.Black, // White text for contrast
+                TextSecondary = Colors.Shades.Black, // White text for contrast
+            },
+        };
+}
+
+
+
 <MudPopoverProvider />
 
 @* Needed for dialogs *@

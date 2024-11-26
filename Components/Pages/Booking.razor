@@ -1,112 +1,184 @@
-﻿@page "/booking"
+﻿@using MudBlazor
+@using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Services
-@using RZA_OMwebsite.Pages
-@using MudBlazor
+@using RZA_OMwebsite.Models
+@inject UserSession UserSession
 @inject AuthService AuthService
-@inject PageService PageService
+@inject RoomService RoomService
+@inject RoombookingService RoombookingService
+@inject CustomerService CustomerService
 @inject NavigationManager NavigationManager
 
+@rendermode InteractiveServer
 
-<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
-    <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
-        <MudText Typo="Typo.h4" Align="Align.Center">Booking Page</MudText>
-        <MudDivider Class="my-2" />
+@page "/booking"
 
-        @if (!AuthService.isLoggedIn)
-        {
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/"))">Go to Home</MudButton>
-        }
-        else
-        {
-            <MudForm @ref="bookingForm" Model="bookingModel">
-                <MudTextField @bind-Value="bookingModel.Name" Label="Name" Required="true" />
-                <br />
-                <MudTextField @bind-Value="bookingModel.Email" Label="Email" Required="true" />
-                <br />
-                <MudTextField @bind-Value="bookingModel.Phone" Label="Phone Number" Required="true" />
-                <br />
-                <MudSelect @bind-Value="bookingModel.Tickets" Label="Number of Tickets" Required="true">
-                    <MudSelectItem Value="1">1</MudSelectItem>
-                    <MudSelectItem Value="2">2</MudSelectItem>
-                    <MudSelectItem Value="3">3</MudSelectItem>
-                    <MudSelectItem Value="4">4</MudSelectItem>
-                    <MudSelectItem Value="5">5</MudSelectItem>
+<br />
+<MudPaper Elevation="3" Class="p-4">
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom>
+        Booking
+    </MudText>
+
+    <MudButton OnClick="ShowUserId" Variant="Variant.Filled" Color="Color.Primary">
+        Show User ID
+    </MudButton>
+
+    @if (customer != null)
+    {
+        <MudList T="string">
+            <MudListItem>
+                <MudText Align="Align.Center">@customer.FirstName @customer.LastName</MudText>
+            </MudListItem>
+        </MudList>
+    }
+    else
+    {
+        <MudText Typo="Typo.body1" Color="Color.Error">
+            Could not load customer information. Please log in again.
+        </MudText>
+    }
+
+    @if (rooms != null)
+    {
+        <MudList T="int" Dense="true">
+            @foreach (var room in rooms)
+            {
+                <MudListItem>
+                    Room @room.RoomNumber: @room.RoomType for @room.Capacity people
+                </MudListItem>
+            }
+        </MudList>
+    }
+    else
+    {
+        <MudText Typo="Typo.body1" Color="Color.Warning">
+            Rooms are currently unavailable. Please try again later.
+        </MudText>
+    }
+</MudPaper>
+
+<br />
+
+<MudPaper Elevation="2" Class="p-4 mt-4">
+    <MudText Typo="Typo.h5" Align="Align.Center" GutterBottom>
+        Book a Room
+    </MudText>
+
+    <MudForm>
+        <MudGrid>
+            <MudItem xs="12" md="6">
+                <MudSelect @bind-Value="Roomnumber" Label="Select Room" Variant="Variant.Filled">
+                    @if (rooms != null){
+                        @foreach (var room in rooms)
+                        {
+                            <MudSelectItem Value="@room.RoomNumber">@room.RoomType</MudSelectItem>
+                        }
+                    }
+                    else{
+                        <div> NOT LOADED YET</div>
+                    }
                 </MudSelect>
-                <br />
-                <br />
+            </MudItem>
 
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="SubmitBooking">Submit Booking</MudButton>
-            </MudForm>
+            <MudItem xs="12" md="6">
+                <MudTextField Label="Start Date" @bind-Value="startDateString" InputType="InputType.Date" 
+                Variant="Variant.Filled" />
+            </MudItem>
 
-            @if (!string.IsNullOrEmpty(successMessage))
-            {
-                <MudAlert Severity="Severity.Success" Variant="Variant.Outlined" Class="my-2">@successMessage</MudAlert>
-            }
-            @if (!string.IsNullOrEmpty(errorMessage))
-            {
-                <MudAlert Severity="Severity.Error" Variant="Variant.Outlined" Class="my-2">@errorMessage</MudAlert>
-            }
-        }
-    </MudPaper>
-</MudContainer>
+            <MudItem xs="12" md="6">
+                <MudSelect @bind-Value="Days" Label="Number of Days" Variant="Variant.Filled">
+                    @for (int i = 1; i <= 7; i++)
+                    {
+                        var days = i;
+                        <MudSelectItem Value=@days>@days</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudItem>
+        </MudGrid>
+
+        <MudButton OnClick="BookRoom" Variant="Variant.Filled" Color="Color.Secondary" Class="mt-4">
+            Book this Room
+        </MudButton>
+    </MudForm>
+</MudPaper>
+
+<MudText Typo="Typo.body2" Class="mt-4">
+    <MudLink Href="/bookings/mybookings" Target="_blank">My Bookings</MudLink>
+</MudText>
 
 @code {
-    private MudForm? bookingForm; // Make bookingForm nullable
-    private BookingModel bookingModel = new BookingModel();
-    private string successMessage = string.Empty;
-    private string errorMessage = string.Empty;
-    private bool first = true;
+    private Customer? customer;
+    private List<Room>? rooms;
+
+    private DateOnly startDate;
+    private DateTime startDateTime;
+    string? startDateString;
+    private Room? Room;
+    private int Roomnumber;
+    private int Days;
+
+    private bool isLoggedIn;
 
     protected override async Task OnInitializedAsync()
     {
-        if (!CheckLoginStatus())
+        rooms = await RoomService.GetRoomsAsync();
+        Task.Delay(1000);
+        isLoggedIn = CheckLoginStatus();
+
+        if (!isLoggedIn)
         {
-            NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
+            NavigationManager.NavigateTo("/");
+        }
+
+        try
+        {
+            customer = await CustomerService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
+
+            if (customer == null)
+            {
+                Console.WriteLine("No customer found with the provided ID.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching customer: {ex.Message}");
         }
     }
 
     private bool CheckLoginStatus()
     {
-        // Simulate login status; replace this with your actual logic
-        return AuthService.isLoggedIn; // Check the login status
+        return AuthService.isLoggedIn;
     }
 
-    private void SubmitBooking()
+    private async Task ShowUserId()
     {
-        if (bookingForm != null && bookingForm.IsValid)
+        Console.WriteLine($"User ID: {UserSession.customerId}");
+    }
+
+    private async Task BookRoom()
+    {
+        if (Roomnumber <= 0)
         {
-            // Simulate booking submission logic
-            successMessage = "Your booking has been successfully submitted!";
-            errorMessage = string.Empty;
-            bookingModel = new BookingModel(); // Reset form
-            NavigationManager.NavigateTo("/tickets");
+            Console.WriteLine("Please select a valid room.");
+            return;
         }
-        else
+
+        try
         {
-            errorMessage = "Please fill in all required fields.";
-            successMessage = string.Empty;
+            Room = await RoomService.GetRoomAsync(Roomnumber);
+            if (Room == null)
+            {
+                Console.WriteLine("Room not found.");
+                return;
+            }
+            startDate = DateOnly.Parse(startDateString);
+            await RoombookingService.AddRoombookingAsync(customer, Room, startDate, Days);
+            Console.WriteLine($"Room {Room.RoomNumber} booked successfully for {Days} days starting {startDate}.");
+            NavigationManager.NavigateTo("/booking/tickets");
         }
-    }
-
-    public class BookingModel
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public int Tickets { get; set; }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
+        catch (Exception ex)
         {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
-            first = false;
+            Console.WriteLine($"Error booking room: {ex.Message}");
         }
     }
 }

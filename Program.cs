@@ -36,16 +36,21 @@ namespace RZA_OMwebsite
             builder.Services.AddDbContext<TlS2303831RzaContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
                 new MySqlServerVersion(new Version(8, 0, 29))));
+            
             #region hidden
+
             builder.Services.AddScoped<CustomerService>();
             builder.Services.AddScoped<AuthService>();
-            builder.Services.AddSingleton<AuthService>();
-            builder.Services.AddSingleton<UserSession>();
             builder.Services.AddScoped<PageService>();
             builder.Services.AddScoped<AttractionService>();
-            builder.Services.AddScoped<RoombookingService>();
             builder.Services.AddScoped<RoomService>();
+            builder.Services.AddScoped<RoombookingService>();
+            builder.Services.AddScoped<TicketService>();
+            builder.Services.AddScoped<TicketbookingService>();
 
+
+            builder.Services.AddSingleton<AuthService>();
+            builder.Services.AddSingleton<UserSession>();
 
             #endregion
 

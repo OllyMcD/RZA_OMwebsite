@@ -3,45 +3,209 @@
 @using RZA_OMwebsite.Pages
 @using MudBlazor
 @inject AuthService AuthService
-@inject PageService PageService
 @inject NavigationManager NavigationManager
+@inject PageService PageService
 
-<MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #F3CA5F; padding: 2rem;">
-    <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
-        <MudText Typo="Typo.h4" Align="Align.Center">Visitor Information</MudText>
-        <MudDivider Class="my-2" />
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-4">
+    <!-- 1. Page Header -->
+    <MudPaper Class="pa-4 mb-4" Elevation="4">
+        <MudText Typo="Typo.h3" Color="Color.Primary" Align="Align.Center">Welcome to the Visitor Information Hub</MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center">
+            Your complete guide to making the most of your visit.
+        </MudText>
+    </MudPaper>
 
-        @if (!AuthService.isLoggedIn)
-        {
-            <MudText Typo="Typo.body1" Align="Align.Center" Color="Color.Error">You must be logged in to access this page.</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/"))">Go to Home</MudButton>
-        }
-        else
-        {
-            <MudText Typo="Typo.body1" Align="Align.Center">Welcome to our Visitor Info page! Here’s what you need to know:</MudText>
-            <MudText Typo="Typo.body2" Class="mt-2">
-                🌟 **Hours of Operation:** We're open daily from 9 AM to 5 PM.
-            </MudText>
-            <MudText Typo="Typo.body2" Class="mt-2">
-                🗺️ **Location:** 123 Zoo Lane, Animal City.
-            </MudText>
-            <MudText Typo="Typo.body2" Class="mt-2">
-                🎟️ **Tickets:** Purchase your tickets online or at the gate. Discounts available for groups!
-            </MudText>
-            <MudText Typo="Typo.body2" Class="mt-2">
-                🍽️ **Food & Drink:** Enjoy a variety of dining options throughout the park.
-            </MudText>
-        }
+    <!-- 2. Highlighted Events Section -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Secondary" Align="Align.Center">Present Events</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard>
+                    <MudCardMedia Image="images/Nature-walk.jpg" Title="Zoo Day Parade" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">
+                            Join us for the annual Zoo Parade, featuring live music, animal-themed floats, and family fun!
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard>
+                    <MudCardMedia Image="images/Animal-feeding.jpg" Title="Nocturnal Animal Tour" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">
+                            Explore the world of nocturnal animals in an exclusive evening tour.
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard>
+                    <MudCardMedia Image="images/Conservation.jpg" Title="Zoo Keeper for a Day" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2">
+                            Experience a day in the life of a zookeeper with hands-on animal care activities.
+                        </MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <!-- 3. Animal of the Month -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Tertiary" Align="Align.Center">Animal of the Month: The Majestic Tiger</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6">
+                <MudImage Src="images/tiger.jpg" Alt="Tiger" Class="rounded-border" />
+            </MudItem>
+            <MudItem xs="12" sm="6">
+                <MudText Typo="Typo.body2">
+                    Tigers are the largest members of the cat family and are renowned for their power and strength. Learn more about their habitat, diet, and conservation efforts during your visit.
+                </MudText>
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <!-- 4. Visitor Testimonials -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">What Visitors Say</MudText>
+        <MudCarousel TData="string">
+            <MudCarouselItem>
+                <MudText Typo="Typo.body1">
+                    "A fantastic day out for the whole family! The kids loved the giraffe feeding experience."
+                </MudText>
+                <MudText Typo="Typo.caption" Align="Align.Right">- Alex M.</MudText>
+            </MudCarouselItem>
+            <MudCarouselItem>
+                <MudText Typo="Typo.body1">
+                    "Beautiful zoo with lots of shade and rest areas. Highly recommend the bird show!"
+                </MudText>
+                <MudText Typo="Typo.caption" Align="Align.Right">- Priya K.</MudText>
+            </MudCarouselItem>
+            <MudCarouselItem>
+                <MudText Typo="Typo.body1">
+                    "Informative and fun! The guided tour was the highlight of our visit."
+                </MudText>
+                <MudText Typo="Typo.caption" Align="Align.Right">- Sarah T.</MudText>
+            </MudCarouselItem>
+        </MudCarousel>
+    </MudPaper>
+
+    <!-- 5. Pricing Information -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Ticket Pricing</MudText>
+        <MudTable T="string">
+            <MudTableHeader>
+                <MudTableRow>
+                    <MudTableCell>Category</MudTableCell>
+                    <MudTableCell>Price</MudTableCell>
+                </MudTableRow>
+            </MudTableHeader>
+            <MudTableBody>
+                <MudTableRow>
+                    <MudTableCell>Adult</MudTableCell>
+                    <MudTableCell>£15</MudTableCell>
+                </MudTableRow>
+                <MudTableRow>
+                    <MudTableCell>Child (3-12)</MudTableCell>
+                    <MudTableCell>£10</MudTableCell>
+                </MudTableRow>
+                <MudTableRow>
+                    <MudTableCell>Senior</MudTableCell>
+                    <MudTableCell>£12</MudTableCell>
+                </MudTableRow>
+            </MudTableBody>
+        </MudTable>
+    </MudPaper>
+
+    <!-- 6. Opening Hours -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Opening Hours</MudText>
+        <MudTable T="string">
+            <MudTableHeader>
+                <MudTableRow>
+                    <MudTableCell>Day</MudTableCell>
+                    <MudTableCell>Hours</MudTableCell>
+                </MudTableRow>
+            </MudTableHeader>
+            <MudTableBody>
+                <MudTableRow>
+                    <MudTableCell>Monday - Friday</MudTableCell>
+                    <MudTableCell>9:00 AM - 5:00 PM</MudTableCell>
+                </MudTableRow>
+                <MudTableRow>
+                    <MudTableCell>Saturday</MudTableCell>
+                    <MudTableCell>10:00 AM - 6:00 PM</MudTableCell>
+                </MudTableRow>
+                <MudTableRow>
+                    <MudTableCell>Sunday</MudTableCell>
+                    <MudTableCell>10:00 AM - 4:00 PM</MudTableCell>
+                </MudTableRow>
+            </MudTableBody>
+        </MudTable>
+    </MudPaper>
+
+    <!-- 7. Tips for Visitors -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Visitor Tips</MudText>
+        <MudList T="string">
+            <MudListItem>Bring a reusable water bottle – refill stations are available around the zoo.</MudListItem>
+            <MudListItem>Wear comfortable shoes – you'll be walking a lot!</MudListItem>
+            <MudListItem>Arrive early to avoid crowds and catch animal feeding times.</MudListItem>
+            <MudListItem>Check the weather and dress accordingly.</MudListItem>
+        </MudList>
+    </MudPaper>
+
+    <!-- 8. Photo Gallery -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Photo Gallery</MudText>
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudImage Src="images/gallery1.jpg" Alt="Gallery Image 1" Class="rounded-border" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudImage Src="images/gallery2.jpg" Alt="Gallery Image 2" Class="rounded-border" />
+            </MudItem>
+            <MudItem xs="12" sm="6" md="4">
+                <MudImage Src="images/gallery3.jpg" Alt="Gallery Image 3" Class="rounded-border" />
+            </MudItem>
+        </MudGrid>
+    </MudPaper>
+
+    <!-- 9. Park Map Download -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Park Map</MudText>
+        <MudText Typo="Typo.body1" Align="Align.Center">
+            Download a detailed map of the zoo to plan your visit!
+        </MudText>
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="images/ZooMap.pdf" Target="_blank">
+            Download Map
+        </MudButton>
+    </MudPaper>
+
+    <!-- 10. Accessibility Information -->
+    <MudPaper Class="pa-4 mb-4" Elevation="3">
+        <MudText Typo="Typo.h4" Color="Color.Primary" Align="Align.Center">Accessibility</MudText>
+        <MudText Typo="Typo.body1">
+            We are committed to ensuring all guests have an enjoyable visit. The zoo features:
+        </MudText>
+        <MudList T="string">
+            <MudListItem>Wheelchair-accessible pathways</MudListItem>
+            <MudListItem>Reserved parking for visitors with disabilities</MudListItem>
+            <MudListItem>Accessible restrooms located throughout the zoo</MudListItem>
+        </MudList>
     </MudPaper>
 </MudContainer>
 
-@code {
+@code{
     private bool first = true;
 
     protected override async Task OnInitializedAsync()
     {
         if (!CheckLoginStatus())
         {
+            Task.Delay(1000);
             NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
         }
     }
@@ -55,12 +219,177 @@
     {
         if (firstRender)
         {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
+            var currentPageUrl = NavigationManager.Uri.Substring(22); // Get the current page URL
+            await PageService.TrackPageViewAsync(currentPageUrl); // Track page view
             first = false;
         }
     }
+
 }
+
+<style>
+    /* General Styles */
+    .mud-width-full {
+        width: 100%;
+    }
+
+    .mud-container {
+        padding: 2rem;
+    }
+
+    /* Header Section */
+    .header-section {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+        .header-section h3 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--mud-primary);
+        }
+
+        .header-section p {
+            font-size: 1.2rem;
+            color: var(--mud-text-secondary);
+        }
+
+    /* Paper Sections */
+    .mud-paper {
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+        .mud-paper h4 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+    /* Grid System */
+    .mud-grid {
+        gap: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .mud-item img {
+        border-radius: 8px;
+        max-width: 100%;
+        height: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .mud-item img:hover {
+            transform: scale(1.05);
+        }
+
+    /* Cards */
+    .mud-card {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+    }
+
+        .mud-card:hover {
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Carousel */
+    .mud-carousel {
+        margin-top: 1rem;
+    }
+
+    .mud-carousel-item {
+        text-align: center;
+        padding: 2rem;
+        background-color: var(--mud-surface);
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .mud-carousel-item h4 {
+            margin-bottom: 1rem;
+        }
+
+    /* Pricing Table */
+    .mud-table {
+        margin: auto;
+        max-width: 600px;
+        border-collapse: collapse;
+    }
+
+        .mud-table th,
+        .mud-table td {
+            border: 1px solid var(--mud-divider);
+            padding: 0.8rem;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .mud-table th {
+            background-color: var(--mud-primary);
+            color: var(--mud-surface);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .mud-table td {
+            color: var(--mud-text-secondary);
+        }
+
+    /* Buttons */
+    .mud-button {
+        margin: 1rem 0;
+        font-weight: bold;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .mud-button:hover {
+            background-color: var(--mud-secondary);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Lists */
+    .mud-list {
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .mud-list-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        color: var(--mud-text-primary);
+    }
+
+        .mud-list-item::before {
+            content: '•';
+            margin-right: 0.5rem;
+            color: var(--mud-primary);
+            font-size: 1.5rem;
+        }
+
+    /* Accessibility Section */
+    .accessibility-section {
+        background-color: var(--mud-background);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+    }
+
+        .accessibility-section h4 {
+            font-size: 1.8rem;
+            color: var(--mud-primary);
+        }
+
+        .accessibility-section p {
+            font-size: 1rem;
+            color: var(--mud-text-secondary);
+        }
+
+</style>

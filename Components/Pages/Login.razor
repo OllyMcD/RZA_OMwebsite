@@ -2,6 +2,7 @@
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Pages
+@using RZA_OMwebsite.Models
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject CustomerService CustomerService
@@ -20,6 +21,11 @@
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
     </MudForm>
 
+    @if (isLoading)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+    }
+
     @if (!string.IsNullOrEmpty(message))
     {
         <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
@@ -29,32 +35,29 @@
 @code {
     private string? username;
     private string? password;
-    private string? specialCodeEntered = string.Empty; // Store the code being entered
+    private string? specialCodeEntered = string.Empty;
     private string message = string.Empty;
-    private bool first = true;
     private Severity alertSeverity;
+    private bool isLoading = false;
 
-    // Handle keypress globally and capture the 4-digit code
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
         if (e.Key == "Enter")
         {
-            await LoginUser();  // Trigger login when Enter key is pressed
+            await LoginUser();
         }
         else
         {
-            // Collect typed keys for the special code
-            if (specialCodeEntered.Length < 4) // Only collect 11 digits
+            if (specialCodeEntered.Length < 4)
             {
                 specialCodeEntered += e.Key;
             }
 
-            // If the 4-digit code is entered, check if it's correct
-            if (specialCodeEntered == "1234")  // Change "1234" to your secret code
+            if (specialCodeEntered == "1234")
             {
                 message = "Special code entered! Redirecting to special page.";
                 alertSeverity = Severity.Success;
-                NavigationManager.NavigateTo("/c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f"); // Redirect to special page
+                NavigationManager.NavigateTo("/c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f");
             }
         }
     }
@@ -68,19 +71,25 @@
             return;
         }
 
+        isLoading = true;
+        NavigationManager.NavigateTo("/loading"); // Redirect to the loading page
+
+        // Simulate delay while checking login (handled on loading page)
+        await Task.Delay(1000); // Delay to simulate processing
+
         var hashedPassword = PasswordUtils.HashPassword(password);
+        bool customer = await CustomerService.ValidateLoginAsync(username, hashedPassword);
 
-        // Attempt to log in and retrieve the customer object if successful
-        var customer = await CustomerService.ValidateLoginAsync(username, hashedPassword);
+        isLoading = false;
 
-        if (customer != false) // Corrected this line to check for FALSE
+        if (customer != false)
         {
-            // Set the user as logged in with AuthService and store the customer ID in UserSession
-            AuthService.Login(username); // Set login state and username
-
+            AuthService.Login(username);
             message = "Login successful!";
             alertSeverity = Severity.Success;
-            NavigationManager.NavigateTo("/main"); // Redirect to main page
+            Customer thisCustomer = await CustomerService.GetCustomerByUsernameAsync(username);
+            UserSession.customerId = thisCustomer.CustomerId;
+            NavigationManager.NavigateTo("/main");
         }
         else
         {
@@ -89,29 +98,18 @@
         }
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        // if (UserSession.customerId == 0)
-        // {
-        //     NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
-        // }
-    }
-
-    private bool CheckLoginStatus()
-    {
-        return AuthService.isLoggedIn; // Check the login status
-    }
-
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
-            first = false;
+            try
+            {
+                await PageService.TrackPageViewAsync("/login");
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Failed to track page view: {ex.Message}");
+            }
         }
     }
 }

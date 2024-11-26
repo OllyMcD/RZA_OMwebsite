@@ -96,6 +96,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Task.Delay(1000);
+
         if (AuthService.isLoggedIn)
         {
             // Fetch customer details if logged in

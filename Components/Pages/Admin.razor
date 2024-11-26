@@ -57,6 +57,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Task.Delay(1000);
         // Retrieve simulated analytics data
         activeUsersCount = await PageService.GetActiveUserCountAsync();
         pageViewsCount = await PageService.GetPageViewsCountAsync();

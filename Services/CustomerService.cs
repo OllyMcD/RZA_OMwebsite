@@ -63,7 +63,7 @@ namespace RZA_OMwebsite.Services
                 var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
                 if (customer != null)
                 {
-                    //var hashedInputPassword = PasswordUtils.HashPassword(password);
+                   
                     if (customer.Password == password)
                     {
                         return true; // Login successful
@@ -78,12 +78,16 @@ namespace RZA_OMwebsite.Services
             }
 
         }
-
+        #region hidden
         // Get customer by username
         public async Task<Customer?> GetCustomerByUsernameAsync(string username)
         {
             return await _context.Customers.FirstOrDefaultAsync(c => c.Username == username);
         }
+
+
+        #endregion
+
 
         // Delete customer by username
         public async Task DeleteCustomerAsync(string username)

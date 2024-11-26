@@ -48,7 +48,11 @@
         NavigationManager.NavigateTo("/account-status");
     }
 
-    protected override async Task OnInitializedAsync() {}
+    protected override async Task OnInitializedAsync()
+    {
+        Task.Delay(1000);
+    }
+    
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -1,116 +1,155 @@
 ﻿@using RZA_OMwebsite.Models
 @using RZA_OMwebsite.Services
-@using RZA_OMwebsite.Pages
+@using RZA_OMwebsite.Utilities
 @inject AttractionService AttractionService
-@inject PageService PageService
+@inject UserSession UserSession
 @inject NavigationManager NavigationManager
+@inject TicketbookingService TicketbookingService
+@inject TicketService TicketService
 
-@page "/tickets"
+@rendermode InteractiveServer
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="shopping-basket">
+@page "/booking/tickets"
 
-    <br />
-    
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom="true">Basket</MudText>
+<br />
 
-    <br />
+<MudContainer>
+    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom>
+        Tickets
+    </MudText>
 
-    <MudPaper Elevation="2" Class="basket-items">
-        @if (attractions != null)
+    @if (attractions != null)
+    {
+        <MudPaper Class="p-4 mb-4">
+            <MudText Typo="Typo.h6">Attractions</MudText>
+            <MudGrid>
+                @foreach (Attraction attraction in attractions)
+                {
+                    <MudItem xs="12" md="6" lg="4">
+                        <MudCard Class="mb-2">
+                            <MudCardContent>
+                                <MudText Typo="Typo.subtitle1">@attraction.Name</MudText>
+                                <MudText Typo="Typo.body2">Price: £@attraction.Price</MudText>
+                                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="mt-2"
+                                           OnClick="@(e => AddTicket(attraction.AttractionId))">
+                                    Add to Basket
+                                </MudButton>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudItem>
+                }
+            </MudGrid>
+            <MudTextField Label="Select Date" InputType="InputType.Date" Variant="Variant.Outlined"
+                          @bind-Value="ticketDateString" Class="mt-4" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="BookTickets">
+                Book Tickets
+            </MudButton>
+        </MudPaper>
+    }
+    else
+    {
+        <MudText Typo="Typo.body1" Color="Color.Warning">No attractions available.</MudText>
+    }
+
+    <MudPaper Class="p-4">
+        <MudText Typo="Typo.h6">Your Tickets</MudText>
+        @if (tickets != null && tickets.Count != 0)
         {
-            @foreach (Attraction attraction in attractions)
-            {
-                <MudItem>
-                    <MudGrid AlignItems="Center" Justify="Justify.Center">
-                        <!-- Attraction Image -->
-                        <MudItem xs="3" Class="d-flex justify-center">
-                            <MudAvatar Size="Size.Large">
-                                <MudImage Src="@GetAttractionImage(attraction.AttractionId)" Alt="@attraction.Name" />
-                            </MudAvatar>
-                        </MudItem>
-
-                        <!-- Attraction Details -->
-                        <MudItem xs="6">
-                            <MudText Typo="Typo.subtitle1">@attraction.Name</MudText>
-                            <MudText Typo="Typo.body2">Price: £@attraction.Price</MudText>
-                        </MudItem>
-
-                        <!-- Add to Basket Button -->
-                        <MudItem xs="3">
-                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(e => AddTicket(attraction.AttractionId))">
-                                Add to Basket
-                            </MudButton>
-                        </MudItem>
-                    </MudGrid>
-                </MudItem>
-                <MudDivider />
-            }
+            <MudList T="int" Dense="true">
+                @foreach (Ticket ticket in tickets)
+                {
+                    <MudListItem>
+                        <MudText Typo="Typo.body2">Ticket ID: @ticket.TicketId, Attraction ID: @ticket.AttractionId</MudText>
+                    </MudListItem>
+                }
+            </MudList>
         }
         else
         {
-            <MudText Typo="Typo.body1" Align="Align.Center">No attractions available</MudText>
+            <MudText Typo="Typo.body1" Color="Color.Info">
+                Your tickets will show here...
+            </MudText>
         }
     </MudPaper>
-
-    <!-- Book Tickets Button -->
-    <MudButton Variant="Variant.Filled" Color="Color.Success" FullWidth="true" Class="book-tickets" Style="margin-top: 20px;">
-        Book Tickets
-    </MudButton>
 </MudContainer>
 
 @code {
-
-    private bool first = true;
-
-    List<Attraction> attractions;
-    List<Ticket> tickets;
+    List<Attraction>? attractions;
+    List<Ticket>? tickets;
+    private DateOnly ticketDate;
+    private DateTime ticketDateTime;
+    string? ticketDateString;
+    Ticketbooking? newTicketbooking;
+    private bool isLoggedIn;
+    private Severity alertSeverity;
 
     protected override async Task OnInitializedAsync()
     {
-        if (!CheckLoginStatus())
+        try
         {
-            NavigationManager.NavigateTo("/"); // Redirect to home if not logged in
+            // Check login status
+            Task.Delay(1000);
+            isLoggedIn = CheckLoginStatus();
+
+            if (!isLoggedIn)
+            {
+                Console.WriteLine("User is not logged in, redirecting to login page.");
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                // Fetch attractions
+                attractions = await AttractionService.GetAttractionsAsync();
+                tickets = new List<Ticket>();
+                newTicketbooking = new Ticketbooking();
+                Console.WriteLine("Attractions and tickets initialized successfully.");
+            }
         }
-        else
+        catch (Exception ex)
         {
-            attractions = await AttractionService.GetAttractionsAsync();
-            tickets = new List<Ticket>();
+            Console.WriteLine($"An error occurred during initialization: {ex.Message}");
+            Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+
+            // Optional: Redirect to an error page
+            NavigationManager.NavigateTo("/booking");
         }
     }
 
     private bool CheckLoginStatus()
     {
-        // Simulate login status; replace this with your actual logic
-        return AuthService.isLoggedIn; // Check the login status
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
-            first = false;
-        }
+        return AuthService.isLoggedIn; // Check actual login status
     }
 
     private void AddTicket(int attractionId)
     {
+        Console.WriteLine("AddTicket button was clicked");
+        Console.WriteLine(ticketDate.ToString());
         Ticket newTicket = new Ticket();
         newTicket.AttractionId = attractionId;
-        newTicket.Date = DateOnly.FromDateTime(DateTime.Now);
+        tickets.Add(newTicket);
     }
 
-    private void BookTickets()
+    private async Task BookTickets()
     {
-        // Booking logic here
-    }
+        // Create a new ticket booking instance
+        Ticketbooking newTicketbooking = new Ticketbooking
+        {
+            CustomerId = UserSession.customerId,
+            DateBooked = DateOnly.FromDateTime(DateTime.Now),
+            Date = DateOnly.Parse(ticketDateString)
+        };
 
-    private string GetAttractionImage(int attractionId)
-    {
-        return $"images/{attractionId}.jpg";
+        // Save the new ticket booking
+        await TicketbookingService.AddTicketbookingAsync(newTicketbooking);
+
+        // Iterate through the tickets in the basket and save each one
+        foreach (Ticket ticket in tickets)
+        {
+            ticket.Ticketbooking = newTicketbooking; // Associate with the booking
+            await TicketService.AddTicketAsync(ticket);
+        }
+
+        // Clear the basket after booking
+        tickets.Clear();
     }
 }

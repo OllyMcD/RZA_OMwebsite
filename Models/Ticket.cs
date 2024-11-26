@@ -9,9 +9,9 @@ public partial class Ticket
 
     public int AttractionId { get; set; }
 
-    public DateOnly? Date { get; set; }
+    public int Ticketbookingid { get; set; }
 
     public virtual Attraction Attraction { get; set; } = null!;
 
-    public virtual ICollection<Ticketbooking> Ticketbookings { get; set; } = new List<Ticketbooking>();
+    public virtual Ticketbooking Ticketbooking { get; set; } = null!;
 }

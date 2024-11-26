@@ -1,0 +1,26 @@
+﻿@page "/loading"
+@using RZA_OMwebsite.Services
+@inject NavigationManager NavigationManager
+
+<br />
+<br />
+<br />
+<br />
+
+<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
+    <MudText Typo="Typo.h4" Align="Align.Center">Please wait...</MudText>
+    <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+
+    <MudText Typo="Typo.h6" Align="Align.Center" Class="mt-4">Simulating login...</MudText>
+</MudPaper>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate loading delay (this could be done by checking login status or just a delay)
+        await Task.Delay(2000);  // Simulate a 2-second loading time
+
+        // After delay, navigate back to the login page or main page based on login status
+        NavigationManager.NavigateTo("/main");  // Or use '/login' if you want to show a retry
+    }
+}

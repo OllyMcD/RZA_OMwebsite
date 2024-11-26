@@ -18,12 +18,11 @@ namespace RZA_OMwebsite.Pages
         {
             Console.WriteLine(pageUrl); 
             var pageStats = await _context.Stats
-                .FirstOrDefaultAsync(ps => ps.PageUrl == pageUrl);
+                .SingleOrDefaultAsync(ps => ps.PageUrl == pageUrl);
 
             if (pageStats == null)
             {
-                // If the page doesn't exist, add a new entry with Page_views set to 1
-
+                Console.WriteLine("New Page Entry");
             }
             else
             {
@@ -53,5 +52,11 @@ namespace RZA_OMwebsite.Pages
         {
             return Task.FromResult(new Random().Next(5, 100)); // Generates a number between 5 and 100
         }
+
+        public async Task Dispose()
+        {
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
