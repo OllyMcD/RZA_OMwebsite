@@ -31,7 +31,7 @@
                                 <MudText Typo="Typo.subtitle1">@attraction.Name</MudText>
                                 <MudText Typo="Typo.body2">Price: £@attraction.Price</MudText>
                                 <MudButton Variant="Variant.Filled" Color="Color.Secondary" Class="mt-2"
-                                           OnClick="@(e => AddTicket(attraction.AttractionId))">
+                                OnClick="@(e => AddTicket(attraction.AttractionId))">
                                     Add to Basket
                                 </MudButton>
                             </MudCardContent>
@@ -40,7 +40,7 @@
                 }
             </MudGrid>
             <MudTextField Label="Select Date" InputType="InputType.Date" Variant="Variant.Outlined"
-                          @bind-Value="ticketDateString" Class="mt-4" />
+            @bind-Value="ticketDateString" Class="mt-4" />
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-4" OnClick="BookTickets">
                 Book Tickets
             </MudButton>
@@ -52,25 +52,36 @@
     }
 
     <MudPaper Class="p-4">
-        <MudText Typo="Typo.h6">Your Tickets</MudText>
-        @if (tickets != null && tickets.Count != 0)
-        {
-            <MudList T="int" Dense="true">
-                @foreach (Ticket ticket in tickets)
-                {
-                    <MudListItem>
-                        <MudText Typo="Typo.body2">Ticket ID: @ticket.TicketId, Attraction ID: @ticket.AttractionId</MudText>
-                    </MudListItem>
-                }
-            </MudList>
-        }
-        else
-        {
-            <MudText Typo="Typo.body1" Color="Color.Info">
-                Your tickets will show here...
-            </MudText>
-        }
-    </MudPaper>
+    <MudText Typo="Typo.h6">Your Tickets</MudText>
+
+    @if (tickets != null && tickets.Count != 0)
+    {
+        <MudList Dense="true" T="int">
+            @for (int i = 0; i < tickets.Count; i++)
+            {
+                var _index = i;
+                <MudListItem>
+                    <MudText Typo="Typo.body1">
+                        Ticket ID: <strong>@tickets[_index].TicketId</strong>, Attraction: <strong>@tickets[_index].Attraction.Name</strong>
+                    </MudText>
+                    <MudButton 
+                        Variant="Variant.Filled" 
+                        Color="Color.Error" 
+                        Size="Size.Small" 
+                        OnClick="@(e => tickets.RemoveAt(_index))">
+                        Delete
+                    </MudButton>
+                </MudListItem>
+            }
+        </MudList>
+    }
+    else
+    {
+        <MudText Typo="Typo.body2" Color="Color.Secondary">
+            No tickets available.
+        </MudText>
+    }
+</MudPaper>
 </MudContainer>
 
 @code {
@@ -127,6 +138,10 @@
         Ticket newTicket = new Ticket();
         newTicket.AttractionId = attractionId;
         tickets.Add(newTicket);
+    }
+    private void DeleteTicket(int Index)
+    {
+        tickets.RemoveAt(Index);
     }
 
     private async Task BookTickets()

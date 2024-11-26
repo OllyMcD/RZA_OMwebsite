@@ -12,12 +12,12 @@
 <br />
 <br />
 
-<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2">
-    <MudText Typo="Typo.h4" Align="Align.Center">Login</MudText>
+<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2" Style="background-color: #286506;">
+    <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center">Login</MudText>
 
     <MudForm>
-        <MudTextField Label="Username" @bind-Value="username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Style="color: #fff;" Label="Username" @bind-Value="username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+        <MudTextField Style="color: #fff;" Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
         <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
     </MudForm>
 

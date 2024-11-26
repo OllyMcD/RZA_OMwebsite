@@ -14,8 +14,8 @@
 @page "/booking"
 
 <br />
-<MudPaper Elevation="3" Class="p-4">
-    <MudText Typo="Typo.h4" Align="Align.Center" GutterBottom>
+<MudPaper Elevation="3" Class="p-4" Style="background-color: #286506">
+    <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center" GutterBottom>
         Booking
     </MudText>
 
@@ -27,7 +27,7 @@
     {
         <MudList T="string">
             <MudListItem>
-                <MudText Align="Align.Center">@customer.FirstName @customer.LastName</MudText>
+                <MudText Style="color: #fff;" Align="Align.Center">@customer.FirstName @customer.LastName</MudText>
             </MudListItem>
         </MudList>
     }

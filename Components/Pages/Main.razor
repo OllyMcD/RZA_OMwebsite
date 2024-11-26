@@ -13,7 +13,7 @@
     <!-- Hero Section -->
     <MudGrid Justify="Justify.Center">
         <MudPaper Class="pa-4" Style="background-color: #9aba8b; width: 100%; text-align: center; margin-bottom: 2rem;">
-            <MudText Typo="Typo.h2" Color="Color.Primary" Align="Align.Center">Welcome Back to Our Site!</MudText>
+            <MudText Typo="Typo.h2" Color="Color.Primary" Align="Align.Center">Welcome to Our Site!</MudText>
             <MudText Typo="Typo.subtitle1" Align="Align.Center">We're glad to have you. Explore your next adventure below.</MudText>
         </MudPaper>
     </MudGrid>
@@ -64,16 +64,18 @@
             </MudItem>
         </MudGrid>
 
-        <!-- Features Section -->
-        <MudGrid Spacing="3" Justify="Justify.Center" AlignItems="Center" Class="mt-5">
-            <MudItem xs="12" sm="6">
-                <MudPaper Class="pa-4" Style="background-color: #FFF8DC;">
-                    <MudText Typo="Typo.h6">🌟 Featured: Animal of the Month</MudText>
-                    <MudText Typo="Typo.body1">Meet our star of the month, the mighty red panda! Come see it up close.</MudText>
-                    <MudButton Class="mt-2" Variant="Variant.Outlined" Color="Color.Success">Learn More</MudButton>
-                </MudPaper>
-            </MudItem>
+    <!-- Features Section -->
+    <MudGrid Spacing="3" Justify="Justify.Center" AlignItems="Center" Class="mt-5">
+        <!-- Animal of the Month -->
+        <MudItem xs="12" sm="6">
+            <MudPaper Class="pa-4" Style="background-color: #FFF8DC;">
+                <MudText Typo="Typo.h6">🌟 Featured: Animal of the Month</MudText>
+                <MudText Typo="Typo.body1">Meet our star of the month, the mighty tiger! Come see it up close.</MudText>
+                <MudButton Class="mt-2" Variant="Variant.Outlined" Color="Color.Success" OnClick="@(() => NavigationManager.NavigateTo("/visitor-info"))">Learn More</MudButton>
+            </MudPaper>
+        </MudItem>
 
+        <!-- Join Our Newsletter -->
         <MudItem xs="12" sm="6">
             <MudPaper Class="pa-4" Style="background-color: #FFF8E7;">
                 <MudText Typo="Typo.h6">💌 Join Our Newsletter</MudText>
@@ -82,8 +84,10 @@
             </MudPaper>
         </MudItem>
 
+        <!-- Snackbar Provider -->
         <MudSnackbarProvider MaxSnackbars="3" PreventDuplicates="True" />
-        </MudGrid>
+    </MudGrid>
+
 
         <br />
         <br />

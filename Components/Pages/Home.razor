@@ -6,23 +6,50 @@
 <MudThemeProvider Theme=@MyCustomTheme />
 
 <body>
-    <MudCarousel Class="mud-width-full" Style="height: 88vh;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
+    <MudCarousel Class="mud-width-full" Style="height: 86.1vh;" ShowArrows="@arrows" ShowBullets="@bullets" EnableSwipeGesture="@enableSwipeGesture" AutoCycle="@autocycle" TData="object">
         <MudCarouselItem Transition="transition" Color="@Color.Primary">
-            <div class="carousel-item-content">
+            <div class="carousel-item-content" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 16px;">
+                <!-- Image -->
                 <MudImage Src="images/HomePage1.jpg" Alt="Main Attraction 1" Class="carousel-image with-border" />
+
+                <!-- Additional Content -->
+                <div style="max-width: 50%; color: var(--mud-palette-text-primary);">
+                    <h2 style="margin: 0;">Visitor Tips?</h2>
+                    <p>Discover the fascinating world of wildlife with our featured attractions. Enjoy the rich biodiversity of our exhibits.</p>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/visitor-info">Learn More</MudButton>
+                </div>
             </div>
         </MudCarouselItem>
+
         <MudCarouselItem Transition="transition" Color="@Color.Secondary">
-            <div class="carousel-item-content">
+            <div class="carousel-item-content" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 16px;">
+                <!-- Image -->
                 <MudImage Src="images/HomePage2.jpg" Alt="Main Attraction 2" Class="carousel-image with-border" />
+
+                <!-- Additional Content -->
+                <div style="max-width: 50%; color: var(--mud-palette-text-primary);">
+                    <h2 style="margin: 0;">Explore New Exhibits</h2>
+                    <p>Our new exhibits showcase rare species from around the globe. Come and explore the wonders of nature.</p>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/visitor-info">Learn More</MudButton>
+                </div>
             </div>
         </MudCarouselItem>
+
         <MudCarouselItem Transition="transition" Color="@Color.Tertiary">
-            <div class="carousel-item-content">
+            <div class="carousel-item-content" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 16px;">
+                <!-- Image -->
                 <MudImage Src="images/HomePage3.jpg" Alt="Main Attraction 3" Class="carousel-image with-border" />
+
+                <!-- Additional Content -->
+                <div style="max-width: 50%; color: var(--mud-palette-text-primary);">
+                    <h2 style="margin: 0;">Plan Your Visit</h2>
+                    <p>Get all the information you need to plan your visit, including opening hours, directions, and ticket prices.</p>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/visitor-info">Learn More</MudButton>
+                </div>
             </div>
         </MudCarouselItem>
     </MudCarousel>
+
 
 
     <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="padding: 16px; background-color: var(--mud-palette-background);" Class="mudContainer">
