@@ -6,7 +6,9 @@
 @inject NavigationManager NavigationManager
 @inject PageService PageService
 
+<div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="background-color: #286506;" Class="mt-4">
+    <br />
     <!-- 1. Page Header -->
     <MudPaper Class="pa-4 mb-4" Elevation="4" Style="background-color: #4d8e0f;">
         <MudText Typo="Typo.h3" Style="color: #fff;" Align="Align.Center">Welcome to the Visitor Information Hub</MudText>
@@ -82,7 +84,7 @@
                 <MudText Typo="Typo.body1" Style="color: #4d8e0f;">
                     "Beautiful zoo with lots of shade and rest areas. Highly recommend the bird show!"
                 </MudText>
-                <MudText Typo="Typo.caption" Align="Align.Right" Style="color: #fff;">- Priya K.</MudText>
+                <MudText Typo="Typo.caption" Align="Align.Right" Style="color: #fff;">- John P.</MudText>
             </MudCarouselItem>
             <MudCarouselItem Style="text-align: center;">
                 <MudText Typo="Typo.body1" Style="color: #4d8e0f;">
@@ -194,6 +196,7 @@
     <br />
     <br />
 </MudContainer>
+</div>
 
 @code 
 {

@@ -4,7 +4,7 @@
 @using Services
 @using Utilities
 @inject PageService PageService
-@inject CustomerService CustomerService
+@inject UserService UserService
 
 <MudPaper Class="pa-4" Elevation="2">
     <MudText Typo="Typo.h4" Align="Align.Center">Admin Dashboard</MudText>
@@ -74,7 +74,7 @@
         }
 
         var customer = new Models.Customer { Username = newUsername, Password = PasswordUtils.HashPassword(newPassword) };
-        var result = await CustomerService.AddCustomerAsync(customer);
+        var result = await UserService.AddCustomerAsync(customer);
 
         if (result)
         {

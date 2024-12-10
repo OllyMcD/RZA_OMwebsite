@@ -1,0 +1,68 @@
+﻿@page "/payment"
+@using RZA_OMwebsite.Utilities
+@using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Pages
+@inject UserSession UserSession
+@inject PageService PageService
+@inject AuthService AuthService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Widget Sale!</PageTitle>
+
+<MudPaper Elevation="4" Class="pa-4" Style="background: #f5f5f5; max-width: 400px; margin: auto; text-align: center;">
+    <MudText Typo="Typo.h5" Class="mb-2">£49</MudText>
+    <MudText Typo="Typo.body1" Class="mb-4">While stocks last!</MudText>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="PlaceOrder">
+        Place Order
+    </MudButton>
+</MudPaper>
+
+@code {
+    private bool isLoggedIn;
+    private bool first = true;
+
+    private void PlaceOrder()
+    {
+        var isSuccess = new Random().Next(0, 2) == 0;
+
+        if (isSuccess)
+        {
+            NavigationManager.NavigateTo("/OrderComplete");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/OrderAbandoned");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(3000);
+        isLoggedIn = CheckLoginStatus();
+
+        if (!isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
+        }
+    }
+}

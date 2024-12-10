@@ -4,7 +4,7 @@
 @using RZA_OMwebsite.Models
 @using RZA_OMwebsite.Pages
 @inject NavigationManager NavigationManager
-@inject CustomerService CustomerService
+@inject UserService UserService
 @inject AuthService AuthService
 @inject PageService PageService
 
@@ -101,7 +101,7 @@
         if (AuthService.isLoggedIn)
         {
             // Fetch customer details if logged in
-            customer = await CustomerService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
+            customer = await UserService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
         }
     }
 
@@ -119,8 +119,8 @@
     {
         if (customer != null)
         {
-            // Call the delete method from CustomerService
-            await CustomerService.DeleteCustomerAsync(customer.Username); // Assuming you have this method implemented
+            // Call the delete method from UserService
+            await UserService.DeleteCustomerAsync(customer.Username); // Assuming you have this method implemented
             AuthService.Logout();
             NavigationManager.NavigateTo("/login"); // Redirect to login page after deletion
             Console.WriteLine("Account Deleted"); 

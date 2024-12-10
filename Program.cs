@@ -6,6 +6,7 @@ using MudBlazor;
 using RZA_OMwebsite.Services;
 using RZA_OMwebsite.Utilities;
 using RZA_OMwebsite.Pages;
+using Stripe;
 
 namespace RZA_OMwebsite
 {
@@ -36,10 +37,12 @@ namespace RZA_OMwebsite
             builder.Services.AddDbContext<TlS2303831RzaContext>(options =>
                 options.UseMySql(builder.Configuration.GetConnectionString("MySqlConnection"),
                 new MySqlServerVersion(new Version(8, 0, 29))));
-            
+
+            StripeConfiguration.ApiKey = builder.Configuration.GetConnectionString("Stripe");
+
             #region hidden
 
-            builder.Services.AddScoped<CustomerService>();
+            builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<PageService>();
             builder.Services.AddScoped<AttractionService>();

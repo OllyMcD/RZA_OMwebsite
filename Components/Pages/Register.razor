@@ -3,7 +3,7 @@
 @using RZA_OMwebsite.Utilities
 @using RZA_OMwebsite.Models
 @using RZA_OMwebsite.Pages
-@inject CustomerService CustomerService
+@inject UserService UserService
 @inject PageService PageService
 @inject NavigationManager NavigationManager
 
@@ -52,7 +52,7 @@
         var hashedPassword = PasswordUtils.HashPassword(newCustomer.Password);
         newCustomer.Password = hashedPassword; // Store the hashed password
 
-        bool isAdded = await CustomerService.AddCustomerAsync(newCustomer);
+        bool isAdded = await UserService.AddCustomerAsync(newCustomer);
 
         if (isAdded)
         {

@@ -5,7 +5,7 @@
 @using RZA_OMwebsite.Models
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
-@inject CustomerService CustomerService
+@inject UserService UserService
 @inject PageService PageService
 @inject UserSession UserSession
 
@@ -75,10 +75,10 @@
         NavigationManager.NavigateTo("/loading"); // Redirect to the loading page
 
         // Simulate delay while checking login (handled on loading page)
-        await Task.Delay(1000); // Delay to simulate processing
+        await Task.Delay(2000); // Delay to simulate processing
 
         var hashedPassword = PasswordUtils.HashPassword(password);
-        bool customer = await CustomerService.ValidateLoginAsync(username, hashedPassword);
+        bool customer = await UserService.ValidateLoginAsync(username, hashedPassword);
 
         isLoading = false;
 
@@ -87,7 +87,7 @@
             AuthService.Login(username);
             message = "Login successful!";
             alertSeverity = Severity.Success;
-            Customer thisCustomer = await CustomerService.GetCustomerByUsernameAsync(username);
+            Customer thisCustomer = await UserService.GetCustomerByUsernameAsync(username);
             UserSession.customerId = thisCustomer.CustomerId;
             NavigationManager.NavigateTo("/main");
         }

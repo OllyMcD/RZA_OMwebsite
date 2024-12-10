@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace RZA_OMwebsite.Services
 {
-    public class CustomerService
+    public class UserService
     {
         private readonly TlS2303831RzaContext _context; 
 
-        public CustomerService(TlS2303831RzaContext context)
+        public UserService(TlS2303831RzaContext context)
         {
             _context = context;
         }

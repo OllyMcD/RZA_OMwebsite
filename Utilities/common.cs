@@ -16,7 +16,7 @@ namespace RZA_OMwebsite.Utilities
         };
 
         // Hashing function for password storage
-        public static string HashPassword(string? password)
+        public static string HashPassword(string password)
         {
             using (var sha256 = SHA256.Create())
             {

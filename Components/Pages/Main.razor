@@ -114,13 +114,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Task.Delay(1000);
+        await Task.Delay(3000);
         isLoggedIn = CheckLoginStatus();
 
         if (!isLoggedIn)
         {
             NavigationManager.NavigateTo("/");
         }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -136,12 +142,6 @@
         }
     }
 
-    private bool CheckLoginStatus()
-    {
-        // Simulate login status; replace this with your actual logic
-        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
-    }
-
     private void HandleSubscribe()
     {
         alertSeverity = Severity.Success;
@@ -149,10 +149,10 @@
         Snackbar.Add("You have successfully subscribed!", alertSeverity);
     }
 
-    public void TearDown()
-    {      
-        PageService.Dispose();
-    }
+    // public void TearDown()
+    // {      
+    //     PageService.Dispose();
+    // }
 }
 
 

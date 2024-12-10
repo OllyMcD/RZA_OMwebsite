@@ -3,7 +3,7 @@
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Pages
 @inject UserSession UserSession
-@inject CustomerService CustomerService
+@inject UserService UserService
 @inject NavigationManager NavigationManager
 @inject PageService PageService
 @inject ISnackbar Snackbar
@@ -71,7 +71,7 @@
         {
             string hashedNewPassword = PasswordUtils.HashPassword(newPassword);
             string hashedOldPassword = PasswordUtils.HashPassword(oldPassword);
-            await CustomerService.ChangePassword(UserSession.customerId, hashedOldPassword, hashedNewPassword);
+            await UserService.ChangePassword(UserSession.customerId, hashedOldPassword, hashedNewPassword);
             Snackbar.Add("Password changed successfully!", Severity.Success);
             NavigationManager.NavigateTo("/account-status");
         }

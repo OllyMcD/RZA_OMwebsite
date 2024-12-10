@@ -6,7 +6,7 @@
 @inject AuthService AuthService
 @inject RoomService RoomService
 @inject RoombookingService RoombookingService
-@inject CustomerService CustomerService
+@inject UserService UserService
 @inject NavigationManager NavigationManager
 
 @rendermode InteractiveServer
@@ -14,6 +14,7 @@
 @page "/booking"
 
 <br />
+<div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
 <MudPaper Elevation="3" Class="p-4" Style="background-color: #286506">
     <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center" GutterBottom>
         Booking
@@ -105,6 +106,7 @@
 <MudText Typo="Typo.body2" Class="mt-4">
     <MudLink Href="/bookings/mybookings" Target="_blank">My Bookings</MudLink>
 </MudText>
+</div>
 
 @code {
     private Customer? customer;
@@ -132,7 +134,7 @@
 
         try
         {
-            customer = await CustomerService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
+            customer = await UserService.GetCustomerByUsernameAsync(AuthService.CurrentUsername);
 
             if (customer == null)
             {
