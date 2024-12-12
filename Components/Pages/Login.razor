@@ -9,28 +9,49 @@
 @inject PageService PageService
 @inject UserSession UserSession
 
-<br />
-<br />
-
-<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2" Style="background-color: #286506;">
-    <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center">Login</MudText>
-
-    <MudForm>
-        <MudTextField Style="color: #fff;" Label="Username" @bind-Value="username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Style="color: #fff;" Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
-    </MudForm>
-
-    @if (isLoading)
-    {
-        <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
     }
 
-    @if (!string.IsNullOrEmpty(message))
-    {
-        <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+    .full-background {
+        height: 100vh; /* Full viewport height */
+        background-color: #1a3d0b; /* Dark green background */
+        padding: 20px;
     }
-</MudPaper>
+
+    .full-paper {
+        background-color: #286506;
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 16px;
+        elevation: 2;
+    }
+</style>
+
+<div class="full-background">
+    <!-- Wrapper div with dark green background and full height -->
+    <MudPaper Class="full-paper">
+        <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center">Login</MudText>
+
+        <MudForm>
+            <MudTextField Style="color: #fff;" Label="Username" @bind-Value="username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudTextField Style="color: #fff;" Label="Password" @bind-Value="password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="LoginUser" Class="mt-3" FullWidth="true">Login</MudButton>
+        </MudForm>
+
+        @if (isLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+        }
+    </MudPaper>
+</div>
 
 @code {
     private string? username;
@@ -75,7 +96,7 @@
         NavigationManager.NavigateTo("/loading"); // Redirect to the loading page
 
         // Simulate delay while checking login (handled on loading page)
-        await Task.Delay(2000); // Delay to simulate processing
+        await Task.Delay(1000); // Delay to simulate processing
 
         var hashedPassword = PasswordUtils.HashPassword(password);
         bool customer = await UserService.ValidateLoginAsync(username, hashedPassword);
@@ -113,3 +134,4 @@
         }
     }
 }
+

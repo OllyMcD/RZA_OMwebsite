@@ -7,26 +7,28 @@
 @inject PageService PageService
 @inject NavigationManager NavigationManager
 
-<br />
-<br />
+<div style="background-color: #1a3d0b; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <!-- Wrapper div with dark green background and full page coverage -->
+    <MudPaper Class="pa-4" MaxWidth="400px" Elevation="2" Style="background-color: #286506;">
+        <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center">Register</MudText>
 
-<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="2" Style="background-color: #286506;">
-    <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center">Register</MudText>
+        <br />
 
-    <MudForm>
-        <MudTextField Style="color: #fff;" Label="Username" @bind-Value="newCustomer.Username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Style="color: #fff;" Label="Password" @bind-Value="newCustomer.Password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Style="color: #fff;" Label="First Name" @bind-Value="newCustomer.FirstName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Style="color: #fff;" Label="Last Name" @bind-Value="newCustomer.LastName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudTextField Style="color: #fff;" Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true">Register</MudButton>
-    </MudForm>
+        <MudForm>
+            <MudTextField Style="color: #fff;" Label="Username" @bind-Value="newCustomer.Username" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudTextField Style="color: #fff;" Label="Password" @bind-Value="newCustomer.Password" InputType="InputType.Password" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudTextField Style="color: #fff;" Label="First Name" @bind-Value="newCustomer.FirstName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudTextField Style="color: #fff;" Label="Last Name" @bind-Value="newCustomer.LastName" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudTextField Style="color: #fff;" Label="Email" @bind-Value="newCustomer.Email" InputType="InputType.Email" Required="true" Class="mb-3" @onkeydown="HandleKeyDown" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true">Register</MudButton>
+        </MudForm>
 
-    @if (!string.IsNullOrEmpty(message))
-    {
-        <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
-    }
-</MudPaper>
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
+        }
+    </MudPaper>
+</div>
 
 @code {
     private bool first = true;

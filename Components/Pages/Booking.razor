@@ -15,97 +15,97 @@
 
 <br />
 <div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
-<MudPaper Elevation="3" Class="p-4" Style="background-color: #286506">
-    <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center" GutterBottom>
-        Booking
-    </MudText>
-
-    <MudButton OnClick="ShowUserId" Variant="Variant.Filled" Color="Color.Primary">
-        Show User ID
-    </MudButton>
-
-    @if (customer != null)
-    {
-        <MudList T="string">
-            <MudListItem>
-                <MudText Style="color: #fff;" Align="Align.Center">@customer.FirstName @customer.LastName</MudText>
-            </MudListItem>
-        </MudList>
-    }
-    else
-    {
-        <MudText Typo="Typo.body1" Color="Color.Error">
-            Could not load customer information. Please log in again.
+    <MudPaper Elevation="3" Class="p-4" Style="background-color: #286506">
+        <MudText Style="color: #fff;" Typo="Typo.h4" Align="Align.Center" GutterBottom>
+            Booking
         </MudText>
-    }
 
-    @if (rooms != null)
-    {
-        <MudList T="int" Dense="true">
-            @foreach (var room in rooms)
-            {
-                <MudListItem>
-                    Room @room.RoomNumber: @room.RoomType for @room.Capacity people
-                </MudListItem>
-            }
-        </MudList>
-    }
-    else
-    {
-        <MudText Typo="Typo.body1" Color="Color.Warning">
-            Rooms are currently unavailable. Please try again later.
-        </MudText>
-    }
-</MudPaper>
-
-<br />
-
-<MudPaper Elevation="2" Class="p-4 mt-4">
-    <MudText Typo="Typo.h5" Align="Align.Center" GutterBottom>
-        Book a Room
-    </MudText>
-
-    <MudForm>
-        <MudGrid>
-            <MudItem xs="12" md="6">
-                <MudSelect @bind-Value="Roomnumber" Label="Select Room" Variant="Variant.Filled">
-                    @if (rooms != null){
-                        @foreach (var room in rooms)
-                        {
-                            <MudSelectItem Value="@room.RoomNumber">@room.RoomType</MudSelectItem>
-                        }
-                    }
-                    else{
-                        <div> NOT LOADED YET</div>
-                    }
-                </MudSelect>
-            </MudItem>
-
-            <MudItem xs="12" md="6">
-                <MudTextField Label="Start Date" @bind-Value="startDateString" InputType="InputType.Date" 
-                Variant="Variant.Filled" />
-            </MudItem>
-
-            <MudItem xs="12" md="6">
-                <MudSelect @bind-Value="Days" Label="Number of Days" Variant="Variant.Filled">
-                    @for (int i = 1; i <= 7; i++)
-                    {
-                        var days = i;
-                        <MudSelectItem Value=@days>@days</MudSelectItem>
-                    }
-                </MudSelect>
-            </MudItem>
-        </MudGrid>
-
-        <MudButton OnClick="BookRoom" Variant="Variant.Filled" Color="Color.Secondary" Class="mt-4">
-            Book this Room
+        <MudButton OnClick="ShowUserId" Variant="Variant.Filled" Color="Color.Primary">
+            Show User ID
         </MudButton>
-    </MudForm>
-</MudPaper>
 
-<MudText Typo="Typo.body2" Class="mt-4">
-    <MudLink Href="/bookings/mybookings" Target="_blank">My Bookings</MudLink>
-</MudText>
+        @if (customer != null)
+        {
+            <MudList T="string">
+                <MudListItem>
+                    <MudText Style="color: #fff;" Align="Align.Center">@customer.FirstName @customer.LastName</MudText>
+                </MudListItem>
+            </MudList>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Color="Color.Error">
+                Could not load customer information. Please log in again.
+            </MudText>
+        }
+
+        @if (rooms != null)
+        {
+            <MudList T="int" Dense="true">
+                @foreach (var room in rooms)
+                {
+                    <MudListItem>
+                        Room @room.RoomNumber: @room.RoomType for @room.Capacity people
+                    </MudListItem>
+                }
+            </MudList>
+        }
+        else
+        {
+            <MudText Typo="Typo.body1" Color="Color.Warning">
+                Rooms are currently unavailable. Please try again later.
+            </MudText>
+        }
+    </MudPaper>
+
+    <br />
+
+    <MudPaper Elevation="2" Class="p-4 mt-4">
+        <MudText Typo="Typo.h5" Align="Align.Center" GutterBottom>
+            Book a Room
+        </MudText>
+
+        <MudForm>
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="Roomnumber" Label="Select Room" Variant="Variant.Filled">
+                        @if (rooms != null){
+                            @foreach (var room in rooms)
+                            {
+                                <MudSelectItem Value="@room.RoomNumber">@room.RoomType</MudSelectItem>
+                            }
+                        }
+                        else{
+                            <div> NOT LOADED YET</div>
+                        }
+                    </MudSelect>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField Label="Start Date" @bind-Value="startDateString" InputType="InputType.Date" 
+                    Variant="Variant.Filled" />
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudSelect @bind-Value="Days" Label="Number of Days" Variant="Variant.Filled">
+                        @for (int i = 1; i <= 7; i++)
+                        {
+                            var days = i;
+                            <MudSelectItem Value=@days>@days</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+
+            <MudButton OnClick="BookRoom" Variant="Variant.Filled" Color="Color.Secondary" Class="mt-4">
+                Book this Room
+            </MudButton>
+        </MudForm>
+    </MudPaper>
+
+    <MudText Typo="Typo.body2" Class="mt-4">
+        <MudLink Href="/bookings/mybookings" Target="_blank">My Bookings</MudLink>
+    </MudText>
 </div>
 
 @code {
@@ -124,7 +124,7 @@
     protected override async Task OnInitializedAsync()
     {
         rooms = await RoomService.GetRoomsAsync();
-        Task.Delay(1000);
+        await Task.Delay(20);
         isLoggedIn = CheckLoginStatus();
 
         if (!isLoggedIn)
@@ -154,6 +154,7 @@
 
     private async Task ShowUserId()
     {
+        await Task.Delay(500);
         Console.WriteLine($"User ID: {UserSession.customerId}");
     }
 

@@ -9,21 +9,88 @@
 
 <PageTitle>Widget Sale!</PageTitle>
 
-<MudPaper Elevation="4" Class="pa-4" Style="background: #f5f5f5; max-width: 400px; margin: auto; text-align: center;">
-    <MudText Typo="Typo.h5" Class="mb-2">£49</MudText>
-    <MudText Typo="Typo.body1" Class="mb-4">While stocks last!</MudText>
+<MudGrid Spacing="3" Justify="Justify.Center" Style="margin-top: 40px;">
+    <!-- Child Plan -->
+    <MudItem xs="12" sm="4" Style="display: flex; justify-content: center;">
+        <MudPaper Elevation="4" Style="background-color: #7ab820; padding: 20px; width: 100%; max-width: 300px; text-align: center;">
+            <MudText Typo="Typo.h5" Style="font-weight: bold;">Child</MudText>
+            <MudText Typo="Typo.h4" Style="font-weight: bold; font-size: 2rem;">$5</MudText>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem;">per child per visit</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Style="margin-top: 10px;" OnClick="IncreaseChildCount">+</MudButton>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem; margin-top: 10px;">Quantity: @childCount</MudText>
+            <MudList T="string" Style="margin-top: 20px; text-align: left;">
+                <MudListItem>Access to all child-friendly exhibits</MudListItem>
+                <MudListItem>Free activity booklet</MudListItem>
+                <MudListItem>Discounts on kids' meals at the cafe</MudListItem>
+                <MudListItem>Priority access to children's shows and events</MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
 
-    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="PlaceOrder">
-        Place Order
-    </MudButton>
-</MudPaper>
+    <!-- Senior Plan -->
+    <MudItem xs="12" sm="4" Style="display: flex; justify-content: center;">
+        <MudPaper Elevation="4" Style="background-color: #9aba8b; padding: 20px; width: 100%; max-width: 300px; text-align: center;">
+            <MudText Typo="Typo.h5" Style="font-weight: bold;">Senior</MudText>
+            <MudText Typo="Typo.h4" Style="font-weight: bold; font-size: 2rem;">$8</MudText>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem;">per senior per visit</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Style="margin-top: 10px;" OnClick="IncreaseSeniorCount">+</MudButton>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem; margin-top: 10px;">Quantity: @seniorCount</MudText>
+            <MudList T="string" Style="margin-top: 20px; text-align: left;">
+                <MudListItem>Access to senior-exclusive events</MudListItem>
+                <MudListItem>Free guided tours</MudListItem>
+                <MudListItem>Discounted parking rates</MudListItem>
+                <MudListItem>Priority access to all exhibits</MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+
+    <!-- Adult Plan -->
+    <MudItem xs="12" sm="4" Style="display: flex; justify-content: center;">
+        <MudPaper Elevation="4" Style="background-color: #4d8e0f; padding: 20px; width: 100%; max-width: 300px; text-align: center;">
+            <MudText Typo="Typo.h5" Style="font-weight: bold;">Adult</MudText>
+            <MudText Typo="Typo.h4" Style="font-weight: bold; font-size: 2rem;">$15</MudText>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem;">per adult per visit</MudText>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" Style="margin-top: 10px;" OnClick="IncreaseAdultCount">+</MudButton>
+            <MudText Typo="Typo.body1" Style="font-size: 1rem; margin-top: 10px;">Quantity: @adultCount</MudText>
+            <MudList T="string" Style="margin-top: 20px; text-align: left;">
+                <MudListItem>Access to all exhibits and events</MudListItem>
+                <MudListItem>Free drink voucher at the cafe</MudListItem>
+                <MudListItem>Discount on special tours</MudListItem>
+                <MudListItem>Exclusive adult-only events</MudListItem>
+            </MudList>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
+
+<MudText Typo="Typo.h5" Style="font-weight: bold; text-align: center; margin-top: 20px;">Total Price: $@totalPrice</MudText>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" Style="display: block; margin: 20px auto;" OnClick="CompletePurchase">Buy Now</MudButton>
 
 @code {
-    private bool isLoggedIn;
-    private bool first = true;
+    private int childCount = 0;
+    private int seniorCount = 0;
+    private int adultCount = 0;
 
-    private void PlaceOrder()
+    private decimal totalPrice => (childCount * 5) + (seniorCount * 8) + (adultCount * 15);
+
+    private void IncreaseChildCount()
     {
+        childCount++;
+    }
+
+    private void IncreaseSeniorCount()
+    {
+        seniorCount++;
+    }
+
+    private void IncreaseAdultCount()
+    {
+        adultCount++;
+    }
+
+    private void CompletePurchase()
+    {
+        // Here you can handle the checkout logic or redirect to a different page
         var isSuccess = new Random().Next(0, 2) == 0;
 
         if (isSuccess)
@@ -33,36 +100,6 @@
         else
         {
             NavigationManager.NavigateTo("/OrderAbandoned");
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Delay(3000);
-        isLoggedIn = CheckLoginStatus();
-
-        if (!isLoggedIn)
-        {
-            NavigationManager.NavigateTo("/");
-        }
-    }
-
-    private bool CheckLoginStatus()
-    {
-        // Simulate login status; replace this with your actual logic
-        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
-            var currentPageUrl = NavigationManager.Uri.Substring(22);
-
-            // Call the method to track the page view
-            await PageService.TrackPageViewAsync(currentPageUrl);
-            first = false;
         }
     }
 }

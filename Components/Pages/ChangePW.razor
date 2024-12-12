@@ -10,46 +10,68 @@
 
 @rendermode InteractiveServer
 
-<MudPaper Class="pa-4 mx-auto" MaxWidth="400px" Elevation="4">
-    <h3>Change Password</h3>
+<style>
+    .change-password-page {
+        background-color: #7ab820; /* Background color as requested */
+        height: 100vh; /* Full viewport height */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
 
-    <MudTextField Label="Old Password"
-                  Type="password"
-                  @bind-Value="oldPassword"
-                  Required="true"
-                  Adornment="Adornment.Start"
-                  Icon="@Icons.Material.Filled.Lock" />
-    <br />
-    <MudTextField Label="Confirm Old Password"
-                  Type="password"
-                  @bind-Value="oldPasswordConfirm"
-                  Required="true"
-                  Adornment="Adornment.Start"
-                  Icon="@Icons.Material.Filled.Lock" />
-    <br />
-    <MudTextField Label="New Password"
-                  Type="password"
-                  @bind-Value="newPassword"
-                  Required="true"
-                  Adornment="Adornment.Start"
-                  Icon="@Icons.Material.Filled.Lock"
-                  OnInput="@( (ChangeEventArgs _) => CheckPasswordStrength() )" />
+<div class="change-password-page">
+    <MudPaper Class="pa-4" MaxWidth="400px" Elevation="4">
+        <MudText Typo="Typo.h4" Align="Align.Center">Change Password</MudText>
 
-    <br />
+        <MudTextField Label="Old Password"
+                      Type="password"
+                      @bind-Value="oldPassword"
+                      Required="true"
+                      Adornment="Adornment.Start"
+                      Icon="@Icons.Material.Filled.Lock" />
+        <br />
+        <MudTextField Label="Confirm Old Password"
+                      Type="password"
+                      @bind-Value="oldPasswordConfirm"
+                      Required="true"
+                      Adornment="Adornment.Start"
+                      Icon="@Icons.Material.Filled.Lock" />
+        <br />
+        <MudTextField Label="New Password"
+                      Type="password"
+                      @bind-Value="newPassword"
+                      Required="true"
+                      Adornment="Adornment.Start"
+                      Icon="@Icons.Material.Filled.Lock"
+                      OnInput="@( (ChangeEventArgs _) => CheckPasswordStrength() )" />
 
-    <!-- Password Strength Checklist -->
-    <ul>
-        <li>@(passwordLengthMet ? "✔️" : "❌") At least 8 characters</li>
-        <li>@(hasUpperCase ? "✔️" : "❌") At least one uppercase letter</li>
-        <li>@(hasLowerCase ? "✔️" : "❌") At least one lowercase letter</li>
-        <li>@(hasNumber ? "✔️" : "❌") At least one number</li>
-        <li>@(hasSpecialChar ? "✔️" : "❌") At least one special character</li>
-    </ul>
+        <br />
 
-    <MudButton OnClick="@ChangePassword" Color="Color.Primary" Variant="Variant.Filled">
-        Change Password
-    </MudButton>
-</MudPaper>
+        <!-- Password Strength Checklist -->
+        <MudList T="string">
+            <MudListItem>
+                @(passwordLengthMet ? "✔️" : "❌") At least 8 characters
+            </MudListItem>
+            <MudListItem>
+                @(hasUpperCase ? "✔️" : "❌") At least one uppercase letter
+            </MudListItem>
+            <MudListItem>
+                @(hasLowerCase ? "✔️" : "❌") At least one lowercase letter
+            </MudListItem>
+            <MudListItem>
+                @(hasNumber ? "✔️" : "❌") At least one number
+            </MudListItem>
+            <MudListItem>
+                @(hasSpecialChar ? "✔️" : "❌") At least one special character
+            </MudListItem>
+        </MudList>
+
+        <MudButton OnClick="@ChangePassword" Color="Color.Primary" Variant="Variant.Filled">
+            Change Password
+        </MudButton>
+    </MudPaper>
+</div>
 
 @code {
     private string? newPassword;
@@ -107,4 +129,3 @@
         }
     }
 }
-
