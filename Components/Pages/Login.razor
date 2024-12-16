@@ -11,22 +11,22 @@
 
 <style>
     html, body {
-        height: 100%;
-        margin: 0;
+    height: 100%;
+    margin: 0;
     }
 
     .full-background {
-        height: 100vh; /* Full viewport height */
-        background-color: #1a3d0b; /* Dark green background */
-        padding: 20px;
+    height: 100vh; /* Full viewport height */
+    background-color: #1a3d0b; /* Dark green background */
+    padding: 20px;
     }
 
     .full-paper {
-        background-color: #286506;
-        max-width: 400px;
-        margin: 0 auto;
-        padding: 16px;
-        elevation: 2;
+    background-color: #286506;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 16px;
+    elevation: 2;
     }
 </style>
 
@@ -60,6 +60,25 @@
     private string message = string.Empty;
     private Severity alertSeverity;
     private bool isLoading = false;
+    private bool isLoggedIn;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(20);
+        isLoggedIn = CheckLoginStatus();
+
+        if (isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/main");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
 
     private async Task HandleKeyDown(KeyboardEventArgs e)
     {
@@ -69,7 +88,7 @@
         }
         else
         {
-            if (specialCodeEntered.Length < 4)
+            if (specialCodeEntered?.Length < 4)
             {
                 specialCodeEntered += e.Key;
             }
@@ -108,7 +127,7 @@
             AuthService.Login(username);
             message = "Login successful!";
             alertSeverity = Severity.Success;
-            Customer thisCustomer = await UserService.GetCustomerByUsernameAsync(username);
+            Customer? thisCustomer = await UserService.GetCustomerByUsernameAsync(username);
             UserSession.customerId = thisCustomer.CustomerId;
             NavigationManager.NavigateTo("/main");
         }

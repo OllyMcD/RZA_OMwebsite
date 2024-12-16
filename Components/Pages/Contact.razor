@@ -5,6 +5,7 @@
 @inject NavigationManager NavigationManager
 @inject PageService PageService
 
+<div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
 <MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4" Style="background-color: #286506;" >
     <MudText Typo="Typo.h4" Align="Align.Center">Contact Us</MudText>
     <MudDivider Class="my-2" />
@@ -101,6 +102,7 @@
         </MudCardContent>
     </MudCard>
 </MudPaper>
+</div>
 
 @code {
     private ContactModel contact = new ContactModel();

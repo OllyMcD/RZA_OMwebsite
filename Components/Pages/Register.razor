@@ -35,6 +35,25 @@
     private Customer newCustomer = new Customer();
     private string message = string.Empty; // Initialize with an empty string
     private Severity alertSeverity;
+    private bool isLoggedIn;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(20);
+        isLoggedIn = CheckLoginStatus();
+
+        if (isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/main");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
 
     private async Task RegisterCustomer()
     {

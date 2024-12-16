@@ -19,50 +19,50 @@
     </MudGrid>
 
 
-        <!-- Action Cards -->
-        <MudGrid Spacing="2" Justify="Justify.Center" AlignItems="Center">
-            <!-- Book Now Section -->
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Style="background-color: #FFFBEA;">
+    <!-- Action Cards -->
+    <MudGrid Spacing="2" Justify="Justify.Center" AlignItems="Center">
+        <!-- Book Now Section -->
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Style="background-color: #FFFBEA;">
                 <MudCardMedia Image="images/MainPage1.jpg" Height="200" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5">Ready to Make a Booking?</MudText>
-                        <MudText Typo="Typo.body2">Your next adventure is waiting! Book your experience now.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/booking"))">Book Now</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Ready to Make a Booking?</MudText>
+                    <MudText Typo="Typo.body2">Your next adventure is waiting! Book your experience now.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => NavigationManager.NavigateTo("/booking"))">Book Now</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
 
-            <!-- Explore Events Section -->
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Style="background-color: #FFFAF0;">
+        <!-- Explore Events Section -->
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Style="background-color: #FFFAF0;">
                 <MudCardMedia Image="images/MainPage2.jpg" Height="200" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5">Upcoming Events</MudText>
-                        <MudText Typo="Typo.body2">Join us for our exclusive events and activities. Explore the list!</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/events"))">Explore Events</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Upcoming Events</MudText>
+                    <MudText Typo="Typo.body2">Join us for our exclusive events and activities. Explore the list!</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => NavigationManager.NavigateTo("/events"))">Explore Events</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
 
-            <!-- Contact Us Section -->
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Style="background-color: #FFFAFA;">
-                    <MudCardMedia Image=images/MainPage3.jpg Height="200" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5">Need Help? Contact Us</MudText>
-                        <MudText Typo="Typo.body2">Got any questions or need assistance? Our team is here to help.</MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="@(() => NavigationManager.NavigateTo("/contact"))">Contact Us</MudButton>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
-        </MudGrid>
+        <!-- Contact Us Section -->
+        <MudItem xs="12" sm="6" md="4">
+            <MudCard Style="background-color: #FFFAFA;">
+                <MudCardMedia Image=images/MainPage3.jpg Height="200" />
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">Need Help? Contact Us</MudText>
+                    <MudText Typo="Typo.body2">Got any questions or need assistance? Our team is here to help.</MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Variant="Variant.Filled" Color="Color.Tertiary" OnClick="@(() => NavigationManager.NavigateTo("/contact"))">Contact Us</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    </MudGrid>
 
     <!-- Features Section -->
     <MudGrid Spacing="3" Justify="Justify.Center" AlignItems="Center" Class="mt-5">
@@ -89,21 +89,21 @@
     </MudGrid>
 
 
-        <br />
-        <br />
-        <br />
+    <br />
+    <br />
+    <br />
 
-        <!-- Footer Section -->
-        <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
-            <MudItem>
-                <MudText Typo="Typo.body2" Color="Color.Secondary">© 2024 RigetZooAdventures</MudText>
-            </MudItem>
-            <MudItem>
-                <MudImage Src="images/Facebook.png" Style="width: 24px; height: 24px;" />
-                <MudImage Src="images/Twitter.png" Style="width: 24px; height: 24px;" />
-                <MudImage Src="images/Instagram.png" Style="width: 24px; height: 24px;" />
-            </MudItem>
-        </MudGrid>
+    <!-- Footer Section -->
+    <MudGrid Justify="Justify.SpaceBetween" Class="mt-5">
+        <MudItem>
+            <MudText Typo="Typo.body2" Color="Color.Secondary">© 2024 RigetZooAdventures</MudText>
+        </MudItem>
+        <MudItem>
+            <MudImage Src="images/Facebook.png" Style="width: 24px; height: 24px;" />
+            <MudImage Src="images/Twitter.png" Style="width: 24px; height: 24px;" />
+            <MudImage Src="images/Instagram.png" Style="width: 24px; height: 24px;" />
+        </MudItem>
+    </MudGrid>
 
 </MudContainer>
 
@@ -114,7 +114,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(3000);
+        await Task.Delay(100);
         isLoggedIn = CheckLoginStatus();
 
         if (!isLoggedIn)
@@ -146,6 +146,27 @@
     {
         alertSeverity = Severity.Success;
         Console.WriteLine("Subscribed");
+        Console.WriteLine(@"
+                              *****     *****
+                            ********* *********
+                          *********** ***********
+                         *************************
+                         *************************
+                         ************************
+                          ***********************
+                           *********************
+                            *******************
+                             *****************
+                              ***************
+                                ***********
+                                 *********
+                                  *******
+                                   *****
+                                    ***
+                                     *
+                                  
+
+");
         Snackbar.Add("You have successfully subscribed!", alertSeverity);
     }
 

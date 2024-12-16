@@ -124,7 +124,6 @@
     protected override async Task OnInitializedAsync()
     {
         rooms = await RoomService.GetRoomsAsync();
-        await Task.Delay(20);
         isLoggedIn = CheckLoginStatus();
 
         if (!isLoggedIn)
