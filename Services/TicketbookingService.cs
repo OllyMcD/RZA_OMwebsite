@@ -19,5 +19,10 @@ namespace RZA_OMwebsite.Services
             await _context.Ticketbookings.AddAsync(newTicketbooking);
             await _context.SaveChangesAsync();
         }
+        public async Task DeleteUserTicketBookings(int userid)
+        {
+            _context.Ticketbookings.RemoveRange(_context.Ticketbookings.Where(t => t.CustomerId == userid));
+            await _context.SaveChangesAsync();
+        }
     }
 }

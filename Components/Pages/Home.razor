@@ -1,6 +1,9 @@
 ﻿@page "/"
-@inject NavigationManager NavigationManager
 @using RZA_OMwebsite.Pages
+@using RZA_OMwebsite.Services
+@inject NavigationManager NavigationManager
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 @inject PageService PageService
 
 <MudThemeProvider Theme=@MyCustomTheme />
@@ -90,6 +93,13 @@
                 TextSecondary = Colors.Shades.White, // White text for contrast
             },
         };
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Log the action (e.g., visiting the home page)
+        await TrackingService.LogActionAsync("Visited Home Page", HttpContextAccessor.HttpContext);
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

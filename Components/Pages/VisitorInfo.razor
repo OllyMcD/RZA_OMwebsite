@@ -5,6 +5,8 @@
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
 <MudContainer MaxWidth="MaxWidth.ExtraLarge" Style="background-color: #286506;" Class="mt-4">
@@ -225,4 +227,21 @@
     private bool enableSwipeGesture = false;
     private bool autocycle = true;
     private Transition transition = Transition.Fade;
+    private bool firstRender = true;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TrackingService.LogActionAsync("Visited VisitorInfo Page", HttpContextAccessor.HttpContext);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            this.firstRender = false;
+        }
+    }
 }

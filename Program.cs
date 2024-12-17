@@ -45,12 +45,16 @@ namespace RZA_OMwebsite
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<PageService>();
+            builder.Services.AddScoped<TrackingService>();
             builder.Services.AddScoped<AttractionService>();
             builder.Services.AddScoped<RoomService>();
             builder.Services.AddScoped<RoombookingService>();
             builder.Services.AddScoped<TicketService>();
             builder.Services.AddScoped<TicketbookingService>();
 
+
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             builder.Services.AddSingleton<AuthService>();
             builder.Services.AddSingleton<UserSession>();

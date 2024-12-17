@@ -4,6 +4,8 @@
 @using RZA_OMwebsite.Pages
 @inject NavigationManager NavigationManager
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
 <MudPaper Class="pa-4 mx-auto" MaxWidth="800px" Elevation="4" Style="background-color: #286506;" >
@@ -126,6 +128,8 @@
 
     protected override async Task OnInitializedAsync() 
     { 
+        await TrackingService.LogActionAsync("Visited Contact Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(1000);
     }
 

@@ -6,6 +6,8 @@
 @inject PageService PageService
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <PageTitle>Widget Sale!</PageTitle>
 
@@ -70,6 +72,8 @@
     private int childCount = 0;
     private int seniorCount = 0;
     private int adultCount = 0;
+    private bool first = true;
+    private bool isLoggedIn;
 
     private decimal totalPrice => (childCount * 5) + (seniorCount * 8) + (adultCount * 15);
 
@@ -100,6 +104,38 @@
         else
         {
             NavigationManager.NavigateTo("/OrderAbandoned");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TrackingService.LogActionAsync("Visited Payment Page", HttpContextAccessor.HttpContext);
+
+        await Task.Delay(100);
+        isLoggedIn = CheckLoginStatus();
+
+        if (!isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return AuthService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Get the current page URL (this can be adjusted depending on how you're tracking page URL)
+            var currentPageUrl = NavigationManager.Uri.Substring(22);
+
+            // Call the method to track the page view
+            await PageService.TrackPageViewAsync(currentPageUrl);
+            first = false;
         }
     }
 }

@@ -36,10 +36,12 @@ public partial class TlS2303831RzaContext : DbContext
 
     public virtual DbSet<Ticketbooking> Ticketbookings { get; set; }
 
+    public virtual DbSet<Tracking> Trackings { get; set; }
+
     public virtual DbSet<Zoo> Zoos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("name=MySqlConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
+        => optionsBuilder.UseMySql("name=MYSqlConnection", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.29-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -251,6 +253,19 @@ public partial class TlS2303831RzaContext : DbContext
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("ticketbooking_fk1");
+        });
+
+        modelBuilder.Entity<Tracking>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("tracking");
+
+            entity.Property(e => e.Action).HasMaxLength(255);
+            entity.Property(e => e.IpAddress)
+                .HasMaxLength(45)
+                .HasColumnName("IP_Address");
+            entity.Property(e => e.Timestamp).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Zoo>(entity =>

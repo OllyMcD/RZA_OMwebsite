@@ -45,5 +45,10 @@ namespace RZA_OMwebsite.Services
             _context.Roombookings.Remove(roombooking);
             await _context.SaveChangesAsync();
         }
+        public async Task DeleteUserRoomBookings(int userid)
+        {
+            _context.Roombookings.RemoveRange(_context.Roombookings.Where(t => t.CustomerId == userid));
+            await _context.SaveChangesAsync();
+        }
     }
 }

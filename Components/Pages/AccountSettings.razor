@@ -3,10 +3,18 @@
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Models
 @using RZA_OMwebsite.Pages
+@using RZA_OMwebsite.Utilities
 @inject NavigationManager NavigationManager
 @inject UserService UserService
+@inject TicketbookingService TicketbookingService
+@inject RoombookingService RoombookingService
+@inject TicketService TicketService
+@inject UserService UserService
+@inject UserSession UserSession
 @inject AuthService AuthService
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <div style="background-color: #1a3d0b; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
     <!-- Full-screen wrapper with dark green background -->
@@ -99,6 +107,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Account Settings Page", HttpContextAccessor.HttpContext);
 
         if (AuthService.isLoggedIn)
         {
@@ -122,7 +131,17 @@
         if (customer != null)
         {
             // Call the delete method from UserService
-            await UserService.DeleteCustomerAsync(customer.Username); // Assuming you have this method implemented
+            await TicketService.DeleteUserTickets(UserSession.customerId);  //call ticket delete - public async Task DeleteUserTickets(int userid)
+            Console.WriteLine("Deleted UserId from Tickets - 25%");
+
+            await TicketbookingService.DeleteUserTicketBookings(UserSession.customerId);  //call ticketbooking delete - public async Task DeleteUserTicketBookings(int userid)
+            Console.WriteLine("Deleted UserId from Ticketbookings - 50%");
+
+            await RoombookingService.DeleteUserRoomBookings(UserSession.customerId); //call roombooking delete - public async Task DeleteUserRoomBookings(int userid)
+            Console.WriteLine("Deleted UserId from Roombookings - 75%");
+
+            await UserService.DeleteUser(UserSession.customerId); //call customer delete - public async Task DeleteUser(int userid)
+            Console.WriteLine("Deleted UserId from Users - 100%");
             AuthService.Logout();
             NavigationManager.NavigateTo("/login"); // Redirect to login page after deletion
             Console.WriteLine("Account Deleted");

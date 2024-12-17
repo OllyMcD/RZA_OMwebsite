@@ -4,6 +4,8 @@
 @using RZA_OMwebsite.Models
 @using RZA_OMwebsite.Pages
 @inject UserService UserService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 @inject PageService PageService
 @inject NavigationManager NavigationManager
 
@@ -40,6 +42,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Register Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(20);
         isLoggedIn = CheckLoginStatus();
 

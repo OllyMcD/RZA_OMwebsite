@@ -4,6 +4,8 @@
 @using RZA_OMwebsite.Models
 @using MudBlazor
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
@@ -114,6 +116,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Main Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(100);
         isLoggedIn = CheckLoginStatus();
 

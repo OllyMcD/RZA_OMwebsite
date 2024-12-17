@@ -1,0 +1,34 @@
+﻿using RZA_OMwebsite.Models;
+
+namespace RZA_OMwebsite.Services
+{
+    public class TrackingService
+    {
+        private readonly TlS2303831RzaContext _context;
+
+        public TrackingService(TlS2303831RzaContext context)
+        {
+            _context = context;
+        }
+
+        public async Task LogActionAsync(string action, HttpContext context)
+        {
+            // Get the user's IP address
+            string? ipAddress = context.Connection.RemoteIpAddress?.ToString();
+            string username = context.User?.Identity?.Name ?? "Anonymous";
+
+            // Create the tracking entry
+            var tracking = new Tracking
+            {
+                IpAddress = ipAddress,
+                Action = action,
+                Timestamp = DateTime.Now
+            };
+
+            // Save the entry to the database
+            _context.Trackings.Add(tracking);
+            await _context.SaveChangesAsync();
+        }
+    }
+
+}

@@ -6,6 +6,8 @@
 @inject NavigationManager NavigationManager
 @inject TicketbookingService TicketbookingService
 @inject TicketService TicketService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 @rendermode InteractiveServer
 
@@ -85,6 +87,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Tickets Page", HttpContextAccessor.HttpContext);
+
         try
         {
             isLoggedIn = CheckLoginStatus();

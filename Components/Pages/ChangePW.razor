@@ -7,16 +7,18 @@
 @inject NavigationManager NavigationManager
 @inject PageService PageService
 @inject ISnackbar Snackbar
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 @rendermode InteractiveServer
 
 <style>
     .change-password-page {
-        background-color: #7ab820; /* Background color as requested */
-        height: 100vh; /* Full viewport height */
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    background-color: #7ab820; /* Background color as requested */
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     }
 </style>
 
@@ -25,26 +27,26 @@
         <MudText Typo="Typo.h4" Align="Align.Center">Change Password</MudText>
 
         <MudTextField Label="Old Password"
-                      Type="password"
-                      @bind-Value="oldPassword"
-                      Required="true"
-                      Adornment="Adornment.Start"
-                      Icon="@Icons.Material.Filled.Lock" />
+        Type="password"
+        @bind-Value="oldPassword"
+        Required="true"
+        Adornment="Adornment.Start"
+        Icon="@Icons.Material.Filled.Lock" />
         <br />
         <MudTextField Label="Confirm Old Password"
-                      Type="password"
-                      @bind-Value="oldPasswordConfirm"
-                      Required="true"
-                      Adornment="Adornment.Start"
-                      Icon="@Icons.Material.Filled.Lock" />
+        Type="password"
+        @bind-Value="oldPasswordConfirm"
+        Required="true"
+        Adornment="Adornment.Start"
+        Icon="@Icons.Material.Filled.Lock" />
         <br />
         <MudTextField Label="New Password"
-                      Type="password"
-                      @bind-Value="newPassword"
-                      Required="true"
-                      Adornment="Adornment.Start"
-                      Icon="@Icons.Material.Filled.Lock"
-                      OnInput="@( (ChangeEventArgs _) => CheckPasswordStrength() )" />
+        Type="password"
+        @bind-Value="newPassword"
+        Required="true"
+        Adornment="Adornment.Start"
+        Icon="@Icons.Material.Filled.Lock"
+        OnInput="@( (ChangeEventArgs _) => CheckPasswordStrength() )" />
 
         <br />
 
@@ -117,6 +119,11 @@
         {
             passwordLengthMet = hasUpperCase = hasLowerCase = hasNumber = hasSpecialChar = false;
         }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TrackingService.LogActionAsync("Visited ChangePW Page", HttpContextAccessor.HttpContext);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

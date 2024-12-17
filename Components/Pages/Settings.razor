@@ -1,7 +1,12 @@
 ﻿@page "/accessibility"
 @using MudBlazor
 @using RZA_OMwebsite.Pages
+@using RZA_OMwebsite.Services
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
+
+
 @inject NavigationManager NavigationManager
 
 <div style="background-color: #1a3d0b; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
@@ -52,6 +57,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Settings Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(1000);
     }
 

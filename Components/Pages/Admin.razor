@@ -1,10 +1,12 @@
 ﻿@page "/c1c224b03cd9bc7b6a86d77f5dace40191766c485cd55dc48caf9ac873335d6f"
 @using MudBlazor
 @using RZA_OMwebsite.Pages
-@using Services
-@using Utilities
+@using RZA_OMwebsite.Services
+@using RZA_OMwebsite.Utilities
 @inject PageService PageService
 @inject UserService UserService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <MudPaper Class="pa-4" Elevation="2">
     <MudText Typo="Typo.h4" Align="Align.Center">Admin Dashboard</MudText>
@@ -57,6 +59,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Admin Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(1000);
         // Retrieve simulated analytics data
         activeUsersCount = await PageService.GetActiveUserCountAsync();

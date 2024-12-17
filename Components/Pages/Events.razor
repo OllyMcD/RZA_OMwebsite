@@ -5,6 +5,8 @@
 @inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject PageService PageService
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
 
 <MudContainer MaxWidth="MaxWidth.ExtraExtraLarge" Style="background-color: #286506; padding: 2rem;">
     <MudPaper Class="pa-4 mx-auto" MaxWidth="600px" Elevation="3">
@@ -217,6 +219,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Events Page", HttpContextAccessor.HttpContext);
+
         await Task.Delay(1000);
         if (!CheckLoginStatus())
         {

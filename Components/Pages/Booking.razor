@@ -8,6 +8,9 @@
 @inject RoombookingService RoombookingService
 @inject UserService UserService
 @inject NavigationManager NavigationManager
+@inject TrackingService TrackingService
+@inject IHttpContextAccessor HttpContextAccessor
+
 
 @rendermode InteractiveServer
 
@@ -123,6 +126,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await TrackingService.LogActionAsync("Visited Booking Page", HttpContextAccessor.HttpContext);
+
         rooms = await RoomService.GetRoomsAsync();
         isLoggedIn = CheckLoginStatus();
 

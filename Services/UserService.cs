@@ -118,6 +118,11 @@ namespace RZA_OMwebsite.Services
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task DeleteUser(int userid)
+        {
+            _context.Customers.RemoveRange(_context.Customers.Where(c => c.CustomerId == userid));
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
