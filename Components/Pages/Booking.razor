@@ -16,6 +16,17 @@
 
 @page "/booking"
 
+<MudContainer>
+    @if (isLoading)
+    {
+        <MudSkeleton Height="200px" Width="100%" Variant="Variant.Rectangular" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="80%" Variant="Variant.Text" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="60%" Variant="Variant.Text" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="40%" Variant="Variant.Text" Animation="Animation.Wave" />
+        
+    }
+    else
+    {
 <br />
 <div style="background-color: #1a3d0b; padding: 20px;"> <!-- Wrapper div with dark green background -->
     <MudPaper Elevation="3" Class="p-4" Style="background-color: #286506">
@@ -110,6 +121,8 @@
         <MudLink Href="/bookings/mybookings" Target="_blank">My Bookings</MudLink>
     </MudText>
 </div>
+}
+</MudContainer>
 
 @code {
     private Customer? customer;
@@ -121,11 +134,16 @@
     private Room? Room;
     private int Roomnumber;
     private int Days;
+    private bool isLoading = true;
 
     private bool isLoggedIn;
 
     protected override async Task OnInitializedAsync()
     {
+
+        await Task.Delay(2000); // Simulate loading
+        isLoading = false;
+
         await TrackingService.LogActionAsync("Visited Booking Page", HttpContextAccessor.HttpContext);
 
         rooms = await RoomService.GetRoomsAsync();

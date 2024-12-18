@@ -15,8 +15,10 @@ namespace RZA_OMwebsite.Services
         public async Task LogActionAsync(string action, HttpContext context)
         {
             // Get the user's IP address
+            
             string? ipAddress = context.Connection.RemoteIpAddress?.ToString();
             string username = context.User?.Identity?.Name ?? "Anonymous";
+            await Task.Delay(950);
 
             // Create the tracking entry
             var tracking = new Tracking

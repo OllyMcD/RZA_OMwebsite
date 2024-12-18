@@ -16,6 +16,18 @@
 <br />
 
 <MudContainer>
+
+    @if (isLoading)
+    {
+        <MudSkeleton Height="200px" Width="100%" Variant="Variant.Rectangular" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="80%" Variant="Variant.Text" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="60%" Variant="Variant.Text" Animation="Animation.Wave" />
+        <MudSkeleton Height="200px" Width="40%" Variant="Variant.Text" Animation="Animation.Wave" />
+        
+    }
+    else
+    {
+
     <MudText Typo=Typo.h4 Align=Align.Center GutterBottom>
         Tickets
     </MudText>
@@ -77,6 +89,7 @@
         }
 
     </MudPaper>
+    }
 </MudContainer>
 
 @code {
@@ -84,9 +97,13 @@
     private List<Ticket> tickets = new();
     private string? ticketDateString;
     private bool isLoggedIn;
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(2000); // Simulate loading
+        isLoading = false;
+
         await TrackingService.LogActionAsync("Visited Tickets Page", HttpContextAccessor.HttpContext);
 
         try

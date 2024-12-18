@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject ISnackbar Snackbar
 
 <MudThemeProvider Theme ="MyCustomTheme"/>
 
@@ -67,6 +68,15 @@
 
     void ToggleDrawer()
     {
-        open = !open;
+        try
+        {
+            open = !open;
+        }
+        catch (Exception ex)
+        {
+            // Log the error if needed
+            Console.WriteLine($"Error toggling drawer: {ex.Message}");
+            Snackbar.Add("Error toggling the drawer. Please try again.", Severity.Error);
+        }
     }
 }
