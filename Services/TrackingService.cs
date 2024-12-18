@@ -1,4 +1,5 @@
-﻿using RZA_OMwebsite.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RZA_OMwebsite.Models;
 
 namespace RZA_OMwebsite.Services
 {
@@ -28,6 +29,13 @@ namespace RZA_OMwebsite.Services
             // Save the entry to the database
             _context.Trackings.Add(tracking);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Tracking>> GetTrackingDataAsync()
+        {
+            return await _context.Trackings
+                .OrderByDescending(t => t.Timestamp) // Sort by timestamp, most recent first
+                .ToListAsync();
         }
     }
 

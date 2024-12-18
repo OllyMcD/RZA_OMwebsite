@@ -3,49 +3,95 @@
 @using RZA_OMwebsite.Pages
 @using RZA_OMwebsite.Services
 @using RZA_OMwebsite.Utilities
+@using RZA_OMwebsite.Models
 @inject PageService PageService
 @inject UserService UserService
 @inject TrackingService TrackingService
 @inject IHttpContextAccessor HttpContextAccessor
 
-<MudPaper Class="pa-4" Elevation="2">
-    <MudText Typo="Typo.h4" Align="Align.Center">Admin Dashboard</MudText>
-</MudPaper>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-6">
+    <!-- Header -->
+    <MudPaper Class="pa-4" Elevation="3" Style="background-color: #f5f5f5; border-radius: 10px;">
+        <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-2">Admin Dashboard</MudText>
+    </MudPaper>
 
-<MudContainer Class="mt-4" AlignItems="Align.Center">
-    <!-- Analytics Widgets -->
-    <MudGrid Class="mt-4" Justify="Justify.SpaceBetween">
+    <!-- Analytics Section -->
+    <MudGrid Class="mt-6" Spacing="3" Justify="Justify.SpaceBetween">
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Class="pa-3" Elevation="3">
-                <MudText Typo="Typo.h6">Active Users</MudText>
-                <MudText Typo="Typo.subtitle1">@activeUsersCount</MudText>
-            </MudPaper>
+            <MudCard Class="pa-3">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6" Color="Color.Primary">Active Users</MudText>
+                    <MudText Typo="Typo.h4" Align="Align.Center">@activeUsersCount</MudText>
+                </MudCardContent>
+            </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Class="pa-3" Elevation="3">
-                <MudText Typo="Typo.h6">Page Views</MudText>
-                <MudText Typo="Typo.subtitle1">@pageViewsCount</MudText>
-            </MudPaper>
+            <MudCard Class="pa-3">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6" Color="Color.Primary">Page Views</MudText>
+                    <MudText Typo="Typo.h4" Align="Align.Center">@pageViewsCount</MudText>
+                </MudCardContent>
+            </MudCard>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudPaper Class="pa-3" Elevation="3">
-                <MudText Typo="Typo.h6">New Users (Last 30 Days)</MudText>
-                <MudText Typo="Typo.subtitle1">@newUsersCount</MudText>
-            </MudPaper>
+            <MudCard Class="pa-3">
+                <MudCardContent>
+                    <MudText Typo="Typo.h6" Color="Color.Primary">New Users (Last 30 Days)</MudText>
+                    <MudText Typo="Typo.h4" Align="Align.Center">@newUsersCount</MudText>
+                </MudCardContent>
+            </MudCard>
         </MudItem>
     </MudGrid>
 
     <!-- User Management Section -->
-    <MudText Typo="Typo.h5" Align="Align.Center" Class="mt-4">User Management</MudText>
-    <MudForm>
-        <MudTextField Label="Username" @bind-Value="newUsername" Required="true" Class="mb-3" />
-        <MudTextField Label="Password" @bind-Value="newPassword" InputType="InputType.Password" Required="true" Class="mb-3" />
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddCustomer" Class="mt-3" FullWidth="true">Add Customer</MudButton>
-        @if (!string.IsNullOrEmpty(message))
-        {
-            <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2">@message</MudAlert>
-        }
-    </MudForm>
+    <MudCard Class="mt-6 pa-4">
+        <MudCardHeader>
+            <MudText Typo="Typo.h5" Color="Color.Primary">User Management</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudForm>
+                <MudGrid Class="mb-3">
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Username" @bind-Value="newUsername" Required="true" FullWidth="true" />
+                    </MudItem>
+                    <MudItem xs="12" sm="6">
+                        <MudTextField Label="Password" @bind-Value="newPassword" InputType="InputType.Password" Required="true" FullWidth="true" />
+                    </MudItem>
+                </MudGrid>
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddCustomer" FullWidth="true">Add Customer</MudButton>
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="mt-3">@message</MudAlert>
+                }
+            </MudForm>
+        </MudCardContent>
+    </MudCard>
+
+    <!-- Tracking Section -->
+    <MudCard Class="mt-6 pa-4">
+        <MudCardHeader>
+            <MudText Typo="Typo.h5" Color="Color.Primary">Tracking Data</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudButton OnClick="ReloadTrackingData" Color="Color.Primary" Variant="Variant.Filled" Class="mb-3">
+                Reload Data
+            </MudButton>
+            <MudTable Items="@trackingData" Striped="true" Bordered="true" Hover="true">
+                <HeaderContent>
+                    <MudTh>IP Address</MudTh>
+                    <MudTh>Action</MudTh>
+                    <MudTh>Timestamp</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="IP Address">@context.IpAddress</MudTd>
+                    <MudTd DataLabel="Action">@context.Action</MudTd>
+                    <MudTd DataLabel="Timestamp">
+                        @(context.Timestamp.HasValue ? context.Timestamp.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudCardContent>
+    </MudCard>
 </MudContainer>
 
 @code {
@@ -57,15 +103,17 @@
     private string message = string.Empty;
     private Severity alertSeverity;
 
+    private List<Tracking> trackingData = new List<Tracking>();
+
     protected override async Task OnInitializedAsync()
     {
-        await TrackingService.LogActionAsync("Visited Admin Page", HttpContextAccessor.HttpContext);
 
-        await Task.Delay(1000);
-        // Retrieve simulated analytics data
         activeUsersCount = await PageService.GetActiveUserCountAsync();
         pageViewsCount = await PageService.GetPageViewsCountAsync();
         newUsersCount = await PageService.GetNewUserCountAsync();
+
+        await TrackingService.LogActionAsync("Visited Admin Page", HttpContextAccessor.HttpContext);
+        await LoadTrackingData();
     }
 
     private async Task AddCustomer()
@@ -90,5 +138,15 @@
             message = "Error: Username already exists.";
             alertSeverity = Severity.Error;
         }
+    }
+
+    private async Task LoadTrackingData()
+    {
+        trackingData = await TrackingService.GetTrackingDataAsync();
+    }
+
+    private async Task ReloadTrackingData()
+    {
+        await LoadTrackingData();
     }
 }
